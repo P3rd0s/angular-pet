@@ -1,0 +1,32 @@
+.add-button-clear {
+
+  height: 40px;
+  border-radius: 24px;
+  border: none;
+
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #1071FF;
+
+  .add-button__icon {
+    left: 16px;
+    //top: calc(50% - 18px/2);
+
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: #f6faff;
+  }
+  &:focus {
+    background-color: #e2eeff;
+  }
+  &:active {
+    background-color: #d9e8ff;
+  }
+}

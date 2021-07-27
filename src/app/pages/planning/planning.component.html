@@ -1,0 +1,119 @@
+<div class="planning-page">
+  <div class="current-path">
+    <p>Главная - планирование</p>
+  </div>
+  <div class="path-title">
+    <mat-icon></mat-icon>
+    <h1>Планирование</h1>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Групповое">
+
+
+      <div class="search-filter-panel">
+        <div class="find-filter-box">
+          <mat-form-field class="search-form-field" appearance="fill">
+            <mat-label>Search...</mat-label>
+            <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="tableHandler()">
+            <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchText='';tableHandler()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Программа</mat-label>
+          <mat-select [formControl]="titlesSelect"
+                      (ngModelChange)="tableFiltering.programTitle=titlesSelect.value; tableHandler();">
+            <mat-option (click)="resetTitleFilter()">Все</mat-option>
+            <mat-option *ngFor="let num of titlesVals" [value]="num">
+              {{titlesNames[num]}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Период</mat-label>
+          <input matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
+                          [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Статус</mat-label>
+        <mat-select [formControl]="statusSelect"
+                    (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
+          <mat-option (click)="tableFiltering.status=0">Все</mat-option>
+          <mat-option *ngFor="let num of statusVals" [value]="num">
+            {{statusNames[num-1]}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="mat-elevation-z5 plannings-table">
+
+        <table class="plannings-rows" mat-table [dataSource]="dataSource" matSort
+               (matSortChange)="this.sortBy=$event;tableHandler()">
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Дата начала</th>
+            <td mat-cell *matCellDef="let planningRow"> {{convertDate(planningRow.date)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Название</th>
+            <td mat-cell *matCellDef="let planningRow">{{planningRow.title}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="membersCount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Участников</th>
+            <td mat-cell *matCellDef="let planningRow"> {{planningRow.membersCount}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="trainer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Тренер</th>
+            <td mat-cell *matCellDef="let planningRow"> {{planningRow.trainer}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Прогресс</th>
+            <td mat-cell *matCellDef="let planningRow"> {{planningRow.progress}}%</td>
+          </ng-container>
+
+          <ng-container matColumnDef="menu">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+            <td mat-cell *matCellDef="let planningRow">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <mat-icon>dialpad</mat-icon>
+                  <span>Редактировать</span>
+                </button>
+                <button (click)="deletePlanning(planningRow.id)" mat-menu-item>
+                  <mat-icon>notifications_off</mat-icon>
+                  <span>Удалить слот</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+      </div>
+
+
+    </mat-tab>
+
+
+    <mat-tab label="Индивидуальное"> Content 2</mat-tab>
+  </mat-tab-group>
+</div>
