@@ -16,6 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import {InMemoryDataService} from "./back/in-memory-data.service";
 
+import {MatDialogModule} from '@angular/material/dialog';
+import {PlanningDialogModule} from "./pages/planning-dialog/planning-dialog.module";
+
 
 @NgModule({
   declarations: [
@@ -34,7 +37,9 @@ import {InMemoryDataService} from "./back/in-memory-data.service";
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }
     ),
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule,
+    PlanningDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

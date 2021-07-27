@@ -14,6 +14,8 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatDialogModule} from "@angular/material/dialog";
+import {PlanningDialogModule} from "../planning-dialog/planning-dialog.module";
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatDialogModule,
+    PlanningDialogModule
   ]
 })
 export class PlanningModule { }
