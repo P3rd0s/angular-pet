@@ -83,8 +83,8 @@ export class PlanningService {
               && (filter.membersCount !== planning.members.length))
 
               //By trainer (in last available event, if exists)
-              || ((filter.trainer !== '' && planning.events.length !== 0)
-              && (filter.trainer !== Trainer[(planning.events[planning.events.length - 1].trainer)]))
+              || ((filter.trainer !== '' && len !== 0)
+              && (Trainer[(planning.events[len - 1].trainer)]).indexOf(filter.trainer) === -1)
 
             ) return false;
 

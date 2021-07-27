@@ -37,7 +37,7 @@
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Период</mat-label>
           <input matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
-                          [matDatepicker]="picker">
+                 [matDatepicker]="picker">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker startView="multi-year"></mat-datepicker>
         </mat-form-field>
@@ -49,10 +49,30 @@
                     (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
           <mat-option (click)="tableFiltering.status=0">Все</mat-option>
           <mat-option *ngFor="let num of statusVals" [value]="num">
-            {{statusNames[num-1]}}
+            {{statusNames[num - 1]}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div class="filters-footer">
+        <p>34 сессии</p>
+
+        <button mat-stroked-button>Basic</button>
+
+        <mat-form-field class="filter-trainer-field" appearance="fill">
+          <mat-label>Trainer...</mat-label>
+          <input matInput type="text" [(ngModel)]="tableFiltering.trainer" (ngModelChange)="tableHandler()">
+          <button *ngIf="tableFiltering.trainer" matSuffix mat-icon-button aria-label="Clear"
+                  (click)="tableFiltering.trainer='';tableHandler()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field class="filter-members-field" appearance="fill">
+          <mat-label>Members</mat-label>
+          <input matInput type="number" [(ngModel)]="tableFiltering.membersCount" (ngModelChange)="tableHandler()">
+        </mat-form-field>
+      </div>
 
       <div class="mat-elevation-z5 plannings-table">
 
