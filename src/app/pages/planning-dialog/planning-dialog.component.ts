@@ -76,7 +76,6 @@ export class PlanningDialogComponent implements OnInit {
             ));
         }
 
-        console.log(this.formArr);
       });
   }
 

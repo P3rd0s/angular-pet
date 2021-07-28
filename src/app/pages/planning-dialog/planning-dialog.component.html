@@ -20,7 +20,7 @@
       <h2>Мероприятие, дата и время проведения</h2>
 
       <div *ngFor="let form of formArr.controls; index as idx">
-        <form [formGroup]="form" >
+        <form [formGroup]="form">
           <div class="event">
 
             <mat-form-field appearance="fill">
@@ -65,7 +65,10 @@
     </mat-tab>
 
 
-    <mat-tab label="Участники"> Content 2</mat-tab>
+    <mat-tab label="Участники">
+
+      Content 2
+    </mat-tab>
   </mat-tab-group>
 
 </div>

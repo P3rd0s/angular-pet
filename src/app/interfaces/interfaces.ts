@@ -64,6 +64,7 @@ export interface Event {
 }
 
 export interface Member {
+  id: number,
   name: string,
   group: Group,
   position: Position,

@@ -35,18 +35,21 @@ export class InMemoryDataService implements InMemoryDbService {
 
     const members: Member[] = [
       {
+        id: 0,
         name: 'Павел Овчинников',
         group: Group["Участники мероприятия"],
         position: Position["Ментор"],
         experience: Experience["1 - 3 года"]
       },
       {
+        id: 1,
         name: 'Андрей Андреев',
         group: Group["Участники мероприятия"],
         position: Position["Специалист по безопасности"],
         experience: Experience["1 - 3 года"]
       },
       {
+        id: 2,
         name: 'Алексей Антонов',
         group: Group["Администрирование"],
         position: Position["Менеджер по персоналу"],
