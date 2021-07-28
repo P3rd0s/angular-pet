@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {Sort} from "@angular/material/sort";
-import {Months, Planning, ProgramTitle, TableFiltering, TablePlanning, Trainer} from "../interfaces/interfaces";
+import {Member, Months, Planning, ProgramTitle, TableFiltering, TablePlanning, Trainer} from "../interfaces/interfaces";
 import {catchError, map} from "rxjs/operators";
 
 @Injectable({
@@ -12,6 +12,7 @@ export class PlanningService {
 
 
   private planningUrl = 'api/plannings';
+  private membersUrl = 'api/members';
   private httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
@@ -32,6 +33,33 @@ export class PlanningService {
     return (date.getDay() + ' '
       + Months[date.getMonth()] + ', '
       + date.toTimeString().slice(0, 5));
+  }
+
+  public planningToTableRow (planning: Planning): TablePlanning {
+    let len = planning.events.length;
+    let date = undefined;
+    if (len) {
+      date = new Date(planning.events[len - 1].date);
+    }
+
+    let tableRow: TablePlanning = {
+      id: -1,
+      date: new Date(0),
+      title: '',
+      membersCount: 0,
+      trainer: '',
+      progress: 0
+    }
+    if (len) {
+      tableRow.date = new Date(date?.valueOf() || 0);
+      tableRow.trainer = Trainer[planning.events[planning.events.length - 1].trainer];
+    }
+    tableRow.id = planning.id;
+    tableRow.title = ProgramTitle[planning.title];
+    tableRow.membersCount = planning.members.length;
+    tableRow.progress = planning.progress;
+
+    return tableRow;
   }
 
   //Emulating backend calculations
@@ -98,31 +126,7 @@ export class PlanningService {
 
 
         plannings.map(planning => {
-
-          let len = planning.events.length;
-          let date = undefined;
-          if (len) {
-            date = new Date(planning.events[len - 1].date);
-          }
-
-          let tableRow: TablePlanning = {
-            id: -1,
-            date: new Date(0),
-            title: '',
-            membersCount: 0,
-            trainer: '',
-            progress: 0
-          }
-          if (len) {
-            tableRow.date = new Date(date?.valueOf() || 0);
-            tableRow.trainer = Trainer[planning.events[planning.events.length - 1].trainer];
-          }
-          tableRow.id = planning.id;
-          tableRow.title = ProgramTitle[planning.title];
-          tableRow.membersCount = planning.members.length;
-          tableRow.progress = planning.progress;
-
-          table.push(tableRow);
+          table.push(this.planningToTableRow(planning));
         })
 
         //sorting
@@ -171,6 +175,12 @@ export class PlanningService {
     const planningURL = `${this.planningUrl}/${id}`;
     return this.http.delete<Planning>(planningURL, this.httpOptions).pipe(
       catchError(this.handleError<Planning>(`deleted planning`))
+    );
+  }
+
+  public getMembers(): Observable<Member[]> {
+    return this.http.get<Member[]>(this.membersUrl).pipe(
+      catchError(this.handleError<Member[]>('get members', []))
     );
   }
 

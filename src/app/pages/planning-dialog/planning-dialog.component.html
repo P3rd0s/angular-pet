@@ -1,4 +1,10 @@
-<h1 mat-dialog-title>Планирование</h1>
+<h1 mat-dialog-title>
+  Планирование
+</h1>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="saveChanges()" [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>
 <div *ngIf="planning" class="planning-content" mat-dialog-content>
 
   <mat-tab-group>
@@ -8,8 +14,7 @@
         <mat-label>Программа</mat-label>
         <mat-select #matSelectTitle
                     placeholder="{{programTitleEnum[planning.title]}}"
-                    [(ngModel)]="planning.title"
-                    (ngModelChange)="test()">
+                    [(ngModel)]="planning.title">
           <mat-option *ngFor="let num of getEnumKeys(programTitleEnum)" [value]="num">
             {{programTitleEnum[num]}}
           </mat-option>
@@ -25,24 +30,24 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Мероприятие</mat-label>
-              <input matInput (ngModelChange)="test()" placeholder="Название мероприятия" formControlName="eventName">
+              <input matInput placeholder="Название мероприятия" formControlName="eventName">
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Дата</mat-label>
-              <input matInput (dateChange)="test()" [matDatepicker]="dp" formControlName="date">
+              <input matInput [matDatepicker]="dp" formControlName="date">
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Время</mat-label>
-              <input matInput type="time" (ngModelChange)="test()" formControlName="time" placeholder="Время">
+              <input matInput type="time" formControlName="time" placeholder="Время">
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Тренер</mat-label>
-              <mat-select (ngModelChange)="test()" formControlName="trainer">
+              <mat-select formControlName="trainer">
                 <mat-option *ngFor="let num of getEnumKeys(trainerEnum)" [value]="num">
                   {{trainerEnum[num]}}
                 </mat-option>
@@ -67,7 +72,58 @@
 
     <mat-tab label="Участники">
 
-      Content 2
+      <div cdkDropListGroup>
+        <div class="example-container">
+          <h2>Все пользователи</h2>
+
+          <div
+            cdkDropList
+            [cdkDropListData]="membersList"
+            class="example-list"
+            cdkDropListSortingDisabled
+            [cdkDropListEnterPredicate]="noReturnPredicate"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of membersList; let i = index"
+                 (click)="onTouch($event, i)"
+                 cdkDrag
+                 (cdkDragStarted)="onDragStarted($event, i)">
+
+              <div class="item-placeholder" *cdkDragPlaceholder>
+                <ng-container *ngIf="selectedMembers.length > 0 else single_placeholder">
+                  <div *ngFor="let selectedMember of selectedMembers" class="item-selected">
+                    <div>{{selectedMember.name}}</div>
+                  </div>
+                </ng-container>
+
+                <ng-template #single_placeholder>
+                  <div class="item">{{item.name}}</div>
+                </ng-template>
+              </div>
+
+              <ng-container *ngIf="!(item.checked && isDragging)">
+                <div [ngClass]="item.checked ?  'item-selected' : 'item'">
+                  {{item.name}}
+                </div>
+              </ng-container>
+
+
+<!--              {{item.name}}-->
+            </div>
+          </div>
+        </div>
+
+        <div class="example-container">
+          <h2>Участники мероприятия</h2>
+
+          <div
+            cdkDropList
+            [cdkDropListData]="planning.members"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of planning.members" cdkDrag>{{item.name}}</div>
+          </div>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 

@@ -2,9 +2,18 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {PlanningDialogData} from "../planning/planning.component";
 import {PlanningService} from "../../services/planning.service";
-import {getEnumKeys, JoinCondition, Planning, ProgramTitle, Trainer} from "../../interfaces/interfaces";
+import {
+  Event,
+  getEnumKeys,
+  JoinCondition, Member,
+  Planning,
+  ProgramTitle,
+  TablePlanning,
+  Trainer
+} from "../../interfaces/interfaces";
 import {take} from "rxjs/operators";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {CdkDragDrop, moveItemInArray, copyArrayItem, CdkDragStart} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-planning-dialog',
@@ -24,8 +33,12 @@ export class PlanningDialogComponent implements OnInit {
     members: []
   };
 
-  //Array of events
-  public eventsArr: Event[] = [];
+  //For editing planning members.any type needs for check without this field in DB
+  public membersList: any[] = [];
+  public selectedMembers: any[] = []
+
+  //For drag and drop few members
+  public isDragging: boolean = false;
 
   //For each event
   public formX: FormGroup = new FormGroup({
@@ -34,7 +47,6 @@ export class PlanningDialogComponent implements OnInit {
     date: new FormControl(),
     time: new FormControl()
   });
-
   //Any type to avoid problems in html
   public formArr: any = new FormArray([]);
 
@@ -56,9 +68,10 @@ export class PlanningDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPlanningInfo();
+    this.getMembersList();
   }
 
-  public getPlanningInfo() {
+  public getPlanningInfo(): void {
     this.planningService.getTask(this.data.id)
       .pipe(take<Planning>(1))
       .subscribe(pl => {
@@ -79,7 +92,113 @@ export class PlanningDialogComponent implements OnInit {
       });
   }
 
-  public test() {
-    console.log(this.formArr);
+  public getMembersList(): void {
+    this.planningService.getMembers()
+      .pipe(take<Member[]>(1))
+      .subscribe(list => {
+        this.membersList = list;
+
+        //DONT FORGET REMOVE TOUCHED PROP
+        this.membersList.map(member => Object.assign(member, {checked: false}));
+        //console.log(this.membersList);
+      });
+
   }
+
+  public isEventFilled(event: FormGroup): Event | undefined {
+
+    if (!event.get('eventName')
+      || !event.get('trainer')
+      || !event.get('date')
+      || !event.get('time')
+      || event.get('eventName')?.value == null
+      || event.get('trainer')?.value == null
+      || event.get('date')?.value == null
+      || event.get('time')?.value == null) return undefined;
+
+    return {
+      eventName: event.get('eventName')?.value,
+      trainer: event.get('trainer')?.value,
+      date: new Date(event.get('date')?.value.setHours(parseInt((event.get('time')?.value.slice(0, 2)), 10),
+        parseInt((event.get('time')?.value.slice(3, 5)))))
+    }
+  }
+
+  public saveChanges(): void {
+    let localEvents: Event[] = [];
+    for (let formGr of this.formArr.controls) {
+      let event = this.isEventFilled(formGr);
+      if(event) localEvents.push(event);
+    }
+    this.planning.events = localEvents;
+
+    this.planningService.updateTask(this.planning)
+      .pipe(take<Planning>(1))
+      .subscribe((updated: Planning) => this.planning = updated);
+
+  }
+
+  drop(event: any) {
+    // if (event.previousContainer === event.container) {
+    //   moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    // } else {
+    //   copyArrayItem(event.previousContainer.data,
+    //     event.container.data,
+    //     event.previousIndex,
+    //     event.currentIndex);
+    // }
+
+    console.log(event);
+    this.isDragging = false;
+    // moveItemsInArray(
+    //   this.movies,
+    //   event.previousIndex,
+    //   event.currentIndex,
+    //   this.selectedMovies
+    // );
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      // copyArrayItem(event.previousContainer.data,
+      //   event.container.data,
+      //   event.previousIndex,
+      //   event.currentIndex);
+
+      for(let i in this.selectedMembers){
+        if(this.planning.members.findIndex(member => member.id == this.selectedMembers[i].id) == -1) {
+          //Push into planning members, sort maybe
+        }
+
+      }
+    }
+    for (let i in this.membersList) {
+      this.membersList[i].checked = false;
+    }
+    this.selectedMembers = [];
+  }
+
+  onDragStarted(event: CdkDragStart, index: number): void {
+    this.isDragging = true;
+  }
+
+
+  //Refresh selected members Array
+  onTouch(event: any, idx: number) {
+
+    this.selectedMembers = [];
+    const selectedMember: any = this.membersList[idx];
+    selectedMember.checked = !selectedMember.checked;
+
+    for (let i in this.membersList) {
+      if (this.membersList[i].checked) {
+        this.selectedMembers.push(this.membersList[i]);
+      }
+    }
+  }
+
+  public noReturnPredicate(): boolean {
+    return false;
+  }
+
+
 }

@@ -14,6 +14,8 @@ import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/mater
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatRadioModule} from "@angular/material/radio";
+import {MatButtonModule} from "@angular/material/button";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 export const MY_FORMATS = {
   parse: {
@@ -42,7 +44,9 @@ export const MY_FORMATS = {
     FormsModule,
     MatInputModule,
     MatDatepickerModule,
-    MatRadioModule
+    MatRadioModule,
+    MatButtonModule,
+    DragDropModule
   ],
   providers: [
     // {

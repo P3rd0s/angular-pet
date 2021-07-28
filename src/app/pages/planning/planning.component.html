@@ -87,7 +87,7 @@
       </div>
       <div class="mat-elevation-z5 plannings-table">
 
-        <table class="plannings-rows" mat-table [dataSource]="dataSource" matSort
+        <table #table class="plannings-rows" mat-table [dataSource]="dataSource" matSort
                (matSortChange)="this.sortBy=$event;tableHandler()">
 
           <ng-container matColumnDef="date">

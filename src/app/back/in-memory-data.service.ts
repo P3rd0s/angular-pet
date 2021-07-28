@@ -54,6 +54,20 @@ export class InMemoryDataService implements InMemoryDbService {
         group: Group["Администрирование"],
         position: Position["Менеджер по персоналу"],
         experience: Experience["3 - 10 лет"]
+      },
+      {
+        id: 3,
+        name: 'Алексей Воробьев',
+        group: Group.Администрирование,
+        position: Position.Ментор,
+        experience: Experience["Без опыта"]
+      },
+      {
+        id: 4,
+        name: 'Евгений Жуковский',
+        group: Group["Участники мероприятия"],
+        position: Position["Специалист по безопасности"],
+        experience: Experience["3 - 10 лет"]
       }
     ];
 
@@ -67,7 +81,7 @@ export class InMemoryDataService implements InMemoryDbService {
 
       joinCondition: JoinCondition["Не использовать код доступа"],
 
-      members: members
+      members: members.slice(0, 3)
       },
       {
         id: 1,
@@ -78,13 +92,13 @@ export class InMemoryDataService implements InMemoryDbService {
 
         joinCondition: JoinCondition["Не требовать регистрацию, имя и фамилию"],
 
-        members: members
+        members: members.slice(2, 4)
       }
     ];
-    return {plannings};
+    return {plannings, members};
   }
 
-  genId(plannigs: Planning[]): number {
+  genId(plannigs: any[]): number {
 
     return plannigs.length > 0 ? Math.max(...plannigs.map(p => p.id)) + 1 : 0;
   }

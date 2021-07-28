@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild, Inject} from '@angular/core';
 import {
   getEnumKeys,
-  getEnumNames,
+  getEnumNames, Planning,
   ProgramTitle,
   Status,
   TableFiltering,
@@ -11,7 +11,7 @@ import {MatSort, Sort} from "@angular/material/sort";
 import {MatSelect} from "@angular/material/select";
 import {PlanningService} from "../../services/planning.service";
 import {take} from "rxjs/operators";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {FormControl, Validators} from "@angular/forms";
 import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
@@ -72,6 +72,7 @@ export class PlanningComponent implements OnInit {
   @ViewChild('matSelectTitle') matSelectTitle?: MatSelect;
   @ViewChild('matSelectStatus') matSelectStatus?: MatSelect;
   @ViewChild('picker') datePicker?: MatDatepicker<any>;
+  @ViewChild('table') table?: MatTable<any>;
 
   constructor(public planningsService: PlanningService,
               public dialog: MatDialog) {
@@ -160,6 +161,28 @@ export class PlanningComponent implements OnInit {
 
   public openPlanningDialog(id: number): void {
     const confirmDialog = this.dialog.open(PlanningDialogComponent, {data : {id: id}});
+    confirmDialog.afterClosed()
+      .pipe(take<TablePlanning>(1))
+      .subscribe(isTrue => {
+
+        //Check if save button pressed
+        if(isTrue) {
+
+          //Update row if need it, without get new table from server
+          this.planningsService.getTask(id)
+            .pipe(take<Planning>(1))
+            .subscribe(pl => {
+              let row = this.planningsService.planningToTableRow(pl);
+              this.dataSource.data = this.dataSource.data.map((oldRow: any) => {
+                if(oldRow.id === row.id) oldRow = row;
+                return oldRow;
+              });
+              this.table?.renderRows();
+            })
+        }
+      });
+
+
   }
 
 }
