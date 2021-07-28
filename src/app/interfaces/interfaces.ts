@@ -74,16 +74,11 @@ export interface Member {
 
 export interface Planning {
   id: number,
-  title: ProgramTitle,
   progress: number,
-
   events:Event[],
-
-  joinCondition: JoinCondition,
-
-  members: Member[]
-
-
+  members: Member[],
+  title: ProgramTitle,
+  joinCondition: JoinCondition
 }
 
 export interface TablePlanning {
@@ -96,12 +91,19 @@ export interface TablePlanning {
 
 }
 
+//Not just TablePlanning object because in future we can make 'from to' filter, etc
 export interface TableFiltering {
   programTitle: number,
   period: Date,
   membersCount: number,
   trainer: string,
   status: number
+}
+
+export interface MemberFiltering {
+  group: number,
+  position: number,
+  experience: number
 }
 
 
