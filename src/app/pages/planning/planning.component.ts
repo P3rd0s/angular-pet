@@ -1,5 +1,12 @@
 import {Component, OnInit, ViewChild, Inject} from '@angular/core';
-import {ProgramTitle, Status, TableFiltering, TablePlanning} from "../../interfaces/interfaces";
+import {
+  getEnumKeys,
+  getEnumNames,
+  ProgramTitle,
+  Status,
+  TableFiltering,
+  TablePlanning
+} from "../../interfaces/interfaces";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatSelect} from "@angular/material/select";
 import {PlanningService} from "../../services/planning.service";
@@ -9,7 +16,6 @@ import {FormControl, Validators} from "@angular/forms";
 import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
-import {PlanningDialogModule} from "../planning-dialog/planning-dialog.module";
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
 export interface PlanningDialogData {
   id: number;
@@ -40,24 +46,16 @@ export class PlanningComponent implements OnInit {
     status: 0
   }
 
-  //Generic for get enums keys and values
-  public getEnumNames<T>(e: T): string[] {
-    return Object.keys(e).slice(Object.keys(e).length / 2);
-  }
-
-  public getEnumKeys<T>(e: T): number[] {
-    return Object.keys(e).map(s => parseInt(s, 10)).slice(0, Object.keys(e).length / 2);
-  }
 
   //Title Select Filter
   public titlesSelect = new FormControl();
-  public titlesNames: string[] = this.getEnumNames(ProgramTitle);
-  public titlesVals: number[] = this.getEnumKeys(ProgramTitle);
+  public titlesNames: string[] = getEnumNames(ProgramTitle);
+  public titlesVals: number[] = getEnumKeys(ProgramTitle);
 
   //Status Select Filter
   public statusSelect = new FormControl();
-  public statusNames: string[] = this.getEnumNames(Status);
-  public statusVals: number[] = this.getEnumKeys(Status);
+  public statusNames: string[] = getEnumNames(Status);
+  public statusVals: number[] = getEnumKeys(Status);
 
 
   //Show additional filters button

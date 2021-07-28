@@ -1,5 +1,71 @@
-<h1 mat-dialog-title>This id is</h1>
-<div *ngIf="planning" mat-dialog-content>
-  <h2>{{data.id}}</h2>
-  <p>Name: {{planning.title}}</p>
+<h1 mat-dialog-title>Планирование</h1>
+<div *ngIf="planning" class="planning-content" mat-dialog-content>
+
+  <mat-tab-group>
+    <mat-tab label="Основное">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Программа</mat-label>
+        <mat-select #matSelectTitle
+                    placeholder="{{programTitleEnum[planning.title]}}"
+                    [(ngModel)]="planning.title"
+                    (ngModelChange)="test()">
+          <mat-option *ngFor="let num of getEnumKeys(programTitleEnum)" [value]="num">
+            {{programTitleEnum[num]}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <h2>Мероприятие, дата и время проведения</h2>
+
+      <div *ngFor="let form of formArr.controls; index as idx">
+        <form [formGroup]="form" >
+          <div class="event">
+
+            <mat-form-field appearance="fill">
+              <mat-label>Мероприятие</mat-label>
+              <input matInput (ngModelChange)="test()" placeholder="Название мероприятия" formControlName="eventName">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Дата</mat-label>
+              <input matInput (dateChange)="test()" [matDatepicker]="dp" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Время</mat-label>
+              <input matInput type="time" (ngModelChange)="test()" formControlName="time" placeholder="Время">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Тренер</mat-label>
+              <mat-select (ngModelChange)="test()" formControlName="trainer">
+                <mat-option *ngFor="let num of getEnumKeys(trainerEnum)" [value]="num">
+                  {{trainerEnum[num]}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
+        </form>
+      </div>
+
+      <h2>Условия записи по коду</h2>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        [(ngModel)]="planning.joinCondition">
+        <mat-radio-button class="example-radio-button" *ngFor="let num of getEnumKeys(joinCondEnum)" [value]="num">
+          {{joinCondEnum[num]}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-tab>
+
+
+    <mat-tab label="Участники"> Content 2</mat-tab>
+  </mat-tab-group>
+
 </div>

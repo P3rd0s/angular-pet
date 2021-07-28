@@ -13,11 +13,6 @@ export enum Trainer {
   'Петр Иванов'
 }
 
-export enum EventType {
-  'Тренинг',
-  'Марафон'
-}
-
 export enum JoinCondition {
   'Не использовать код доступа',
   'Требовать регистрацию',
@@ -64,7 +59,6 @@ export enum Months {
 
 export interface Event {
   eventName: string,
-  eventType: EventType,
   trainer: Trainer,
   date: Date
 }
@@ -107,4 +101,14 @@ export interface TableFiltering {
   membersCount: number,
   trainer: string,
   status: number
+}
+
+
+//Generic for get enums keys and values
+export function getEnumNames<T>(e: T): string[] {
+  return Object.keys(e).slice(Object.keys(e).length / 2);
+}
+
+export function getEnumKeys<T>(e: T): number[] {
+  return Object.keys(e).map(s => parseInt(s, 10)).slice(0, Object.keys(e).length / 2);
 }

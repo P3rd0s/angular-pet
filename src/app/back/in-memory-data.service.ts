@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {InMemoryDbService} from 'angular-in-memory-web-api';
 import {
-  EventType,
   Event,
   Experience,
   Group,
@@ -24,13 +23,11 @@ export class InMemoryDataService implements InMemoryDbService {
     const events: Event[] = [
       {
         eventName: 'Главные правила продаж',
-        eventType: EventType.Тренинг,
         trainer: Trainer["Сергей Ефремов"],
         date: new Date('November 4, 2021 09:00:00')
       },
       {
         eventName: 'Как устроиться на работу',
-        eventType: EventType.Марафон,
         trainer: Trainer["Иван Петров"],
         date: new Date('May 18, 2021 19:00:00')
       }
