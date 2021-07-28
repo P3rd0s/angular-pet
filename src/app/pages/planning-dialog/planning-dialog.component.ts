@@ -1,19 +1,21 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {PlanningDialogData} from "../planning/planning.component";
 import {PlanningService} from "../../services/planning.service";
 import {
-  Event,
+  Event, Experience,
   getEnumKeys,
-  JoinCondition, Member,
-  Planning,
+  Group,
+  JoinCondition,
+  Member,
+  MemberFiltering,
+  Planning, Position,
   ProgramTitle,
-  TablePlanning,
   Trainer
 } from "../../interfaces/interfaces";
 import {take} from "rxjs/operators";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {CdkDragDrop, moveItemInArray, copyArrayItem, CdkDragStart} from "@angular/cdk/drag-drop";
+import {moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-planning-dialog',
@@ -59,7 +61,31 @@ export class PlanningDialogComponent implements OnInit {
   public programTitleEnum: typeof ProgramTitle = ProgramTitle;
   public joinCondEnum: typeof JoinCondition = JoinCondition;
   public trainerEnum: typeof Trainer = Trainer;
+  public groupEnum: typeof Group = Group;
+  public positionEnum: typeof Position = Position;
+  public experienceEnum: typeof Experience = Experience;
   getEnumKeys = getEnumKeys;
+
+  //Search and filtering
+  public searchText: string = '';
+  public membersFilter: MemberFiltering = {
+    group: -1,
+    position: -1,
+    experience: -1
+  };
+
+  public groupControl: FormControl = new FormControl();
+  public positionControl: FormControl = new FormControl();
+  public experienceControl: FormControl = new FormControl();
+
+  //Visible search and filters fields
+  public filtersDisplayed: any = {
+    search: true,
+    group: true,
+    position: true,
+    experience: true
+  };
+
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlanningDialogData,
@@ -81,10 +107,11 @@ export class PlanningDialogComponent implements OnInit {
       .pipe(take<Planning>(1))
       .subscribe(pl => {
         this.planning = pl;
-        this.joinedMembers = Object.assign(this.planning.members, {checked: false});
+        this.joinedMembers = [...this.planning.members];//Object.assign(this.planning.members, {checked: false});
 
         if (this.planning.events.length) {
-          this.planning.events.slice(Math.max(this.planning.events.length - this.formArr.length, 0)) //get 3 (last) events
+          //get 3 (last) events
+          this.planning.events.slice(Math.max(this.planning.events.length - this.formArr.length, 0))
             .map((event, idx) => this.formArr.setControl(idx,
               new FormGroup({
                 eventName: new FormControl(event.eventName),
@@ -98,17 +125,52 @@ export class PlanningDialogComponent implements OnInit {
       });
   }
 
+  public memberSubscription(list: Member[]): void {
+    this.membersList = list;
+    this.membersList.map(member => Object.assign(member, {checked: false}));
+  }
+
   public getMembersList(): void {
     this.planningService.getMembers()
       .pipe(take<Member[]>(1))
-      .subscribe(list => {
-        this.membersList = list;
-
-        //DONT FORGET REMOVE CHECKED AND CHECKEDDEL PROPS
-        this.membersList.map(member => Object.assign(member, {checked: false}));
-      });
+      .subscribe(list => this.memberSubscription(list));
 
   }
+
+  //**************************************************************************************************************
+  //******************************-----------FILTERS HANDLER--------------****************************************
+  //****************                                                                               ***************
+
+  public activeFilters(): number {
+    let res = 0;
+    if (this.membersFilter.group !== -1) res++;
+    if (this.membersFilter.position !== -1) res++;
+    if (this.membersFilter.experience !== -1) res++;
+    return res;
+  }
+
+  public resetFilters(): void {
+    this.membersFilter = {
+      group: -1,
+      position: -1,
+      experience: -1
+    };
+  }
+
+  public filterHandler() {
+
+    this.planningService.getParametrizedMembers(this.activeFilters() > 0
+      ? this.membersFilter
+      : undefined, this.searchText)
+      .pipe(take<Member[]>(1))
+      .subscribe(list => this.memberSubscription(list));
+    this.isCopyAllMembers = false;
+  }
+
+
+  //**************************************************************************************************************
+  //******************************------------EVENTS BLOCK----------------****************************************
+  //****************                                                                               ***************
 
   public isEventFilled(event: FormGroup): Event | undefined {
 
@@ -137,11 +199,23 @@ export class PlanningDialogComponent implements OnInit {
     }
     this.planning.events = localEvents;
 
+    //DELETE UNUSABLE PROP
+    this.planning.members = this.joinedMembers.map(m => {
+      delete m.checked;
+      return m;
+    });
+
+    //Update data, put to server
     this.planningService.updateTask(this.planning)
       .pipe(take<Planning>(1))
       .subscribe((updated: Planning) => this.planning = updated);
 
   }
+
+
+  //**************************************************************************************************************
+  //******************************----------DRAG N DROP BLOCK-------------****************************************
+  //****************                                                                               ***************
 
   drop(event: any) {
 
@@ -173,21 +247,23 @@ export class PlanningDialogComponent implements OnInit {
     this.isCopyAllMembers = false;
   }
 
-  onDragStarted(event: CdkDragStart, index: number): void {
-    this.isDragging = true;
+  public noReturnPredicate(): boolean {
+    return false;
+  }
+
+  public deleteOneJoined(id: any): void {
+    this.joinedMembers = this.joinedMembers.filter(m => m.id !== id);
+  }
+
+  public deleteCheckedJoined(): void {
+    this.joinedMembers = this.joinedMembers.filter(m => !m.checked);
+    this.isDeleteAllJoined = false;
   }
 
 
-  //Refresh selected members Array
-  // public onTouch(event: any, idx: number): void {
-  //
-  //   this.selectedMembers = [];
-  //   for (let i in this.membersList) {
-  //     if (this.membersList[i].checked) {
-  //       this.selectedMembers.push(this.membersList[i]);
-  //     }
-  //   }
-  // }
+  //**************************************************************************************************************
+  //******************************----------CHECKBOXES BLOCK--------------****************************************
+  //****************                                                                               ***************
 
   public updateAllChecked(isJoined: boolean = true) {
     //For joined checkbox
@@ -224,14 +300,6 @@ export class PlanningDialogComponent implements OnInit {
     //For members checkbox
     else this.membersList.map(m => m.checked ? res++ : {});
     return res;
-  }
-
-  public noReturnPredicate(): boolean {
-    return false;
-  }
-
-  test() {
-    console.log(this.joinedMembers);
   }
 
 }
