@@ -16,6 +16,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonModule} from "@angular/material/button";
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 export const MY_FORMATS = {
   parse: {
@@ -46,7 +47,8 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatRadioModule,
     MatButtonModule,
-    DragDropModule
+    DragDropModule,
+    MatCheckboxModule
   ],
   providers: [
     // {

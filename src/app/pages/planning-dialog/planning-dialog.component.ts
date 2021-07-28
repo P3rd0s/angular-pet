@@ -35,7 +35,12 @@ export class PlanningDialogComponent implements OnInit {
 
   //For editing planning members.any type needs for check without this field in DB
   public membersList: any[] = [];
-  public selectedMembers: any[] = []
+  //public selectedMembers: any[] = [];
+  public isCopyAllMembers: boolean = false;
+
+  //For delete joined members with checkbox
+  public joinedMembers: any[] = [];
+  public isDeleteAllJoined: boolean = false;
 
   //For drag and drop few members
   public isDragging: boolean = false;
@@ -76,6 +81,7 @@ export class PlanningDialogComponent implements OnInit {
       .pipe(take<Planning>(1))
       .subscribe(pl => {
         this.planning = pl;
+        this.joinedMembers = Object.assign(this.planning.members, {checked: false});
 
         if (this.planning.events.length) {
           this.planning.events.slice(Math.max(this.planning.events.length - this.formArr.length, 0)) //get 3 (last) events
@@ -98,9 +104,8 @@ export class PlanningDialogComponent implements OnInit {
       .subscribe(list => {
         this.membersList = list;
 
-        //DONT FORGET REMOVE TOUCHED PROP
+        //DONT FORGET REMOVE CHECKED AND CHECKEDDEL PROPS
         this.membersList.map(member => Object.assign(member, {checked: false}));
-        //console.log(this.membersList);
       });
 
   }
@@ -128,7 +133,7 @@ export class PlanningDialogComponent implements OnInit {
     let localEvents: Event[] = [];
     for (let formGr of this.formArr.controls) {
       let event = this.isEventFilled(formGr);
-      if(event) localEvents.push(event);
+      if (event) localEvents.push(event);
     }
     this.planning.events = localEvents;
 
@@ -139,42 +144,33 @@ export class PlanningDialogComponent implements OnInit {
   }
 
   drop(event: any) {
-    // if (event.previousContainer === event.container) {
-    //   moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    // } else {
-    //   copyArrayItem(event.previousContainer.data,
-    //     event.container.data,
-    //     event.previousIndex,
-    //     event.currentIndex);
-    // }
 
-    console.log(event);
     this.isDragging = false;
-    // moveItemsInArray(
-    //   this.movies,
-    //   event.previousIndex,
-    //   event.currentIndex,
-    //   this.selectedMovies
-    // );
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      // copyArrayItem(event.previousContainer.data,
-      //   event.container.data,
-      //   event.previousIndex,
-      //   event.currentIndex);
+    } else if (this.countChecked(false) != 0) {
 
-      for(let i in this.selectedMembers){
-        if(this.planning.members.findIndex(member => member.id == this.selectedMembers[i].id) == -1) {
-          //Push into planning members, sort maybe
+      //Add all selected members to current planning
+      for (let m of this.membersList) {
+        if (m.checked && this.joinedMembers.findIndex(member => member.id == m.id) == -1) {
+
+          //Push into joined members, disable checked state, sort maybe
+          this.joinedMembers.push(Object.assign({}, m));
+          this.joinedMembers[this.joinedMembers.length - 1].checked = false;
         }
-
       }
+    } else {
+
+      //Drop single member
+      if (this.joinedMembers.findIndex(m => m.id == event.previousContainer.data[event.previousIndex].id) == -1)
+        this.joinedMembers.push(Object.assign({}, event.previousContainer.data[event.previousIndex]));
     }
+
+    // Unchecked all
     for (let i in this.membersList) {
       this.membersList[i].checked = false;
     }
-    this.selectedMembers = [];
+    this.isCopyAllMembers = false;
   }
 
   onDragStarted(event: CdkDragStart, index: number): void {
@@ -183,22 +179,59 @@ export class PlanningDialogComponent implements OnInit {
 
 
   //Refresh selected members Array
-  onTouch(event: any, idx: number) {
+  // public onTouch(event: any, idx: number): void {
+  //
+  //   this.selectedMembers = [];
+  //   for (let i in this.membersList) {
+  //     if (this.membersList[i].checked) {
+  //       this.selectedMembers.push(this.membersList[i]);
+  //     }
+  //   }
+  // }
 
-    this.selectedMembers = [];
-    const selectedMember: any = this.membersList[idx];
-    selectedMember.checked = !selectedMember.checked;
+  public updateAllChecked(isJoined: boolean = true) {
+    //For joined checkbox
+    if (isJoined) this.isDeleteAllJoined = this.countChecked() == this.joinedMembers.length;
+    //For members checkbox
+    else this.isCopyAllMembers = this.countChecked(isJoined) == this.membersList.length;
+  }
 
-    for (let i in this.membersList) {
-      if (this.membersList[i].checked) {
-        this.selectedMembers.push(this.membersList[i]);
-      }
-    }
+  public someChecked(isJoined: boolean = true): boolean {
+    //For joined checkbox
+    if (isJoined) return this.countChecked() > 0 && !this.isDeleteAllJoined;
+    //For members checkbox
+    return this.countChecked(isJoined) > 0 && !this.isCopyAllMembers;
+  }
+
+  public setAllJoinedChecked(isAllChecked: boolean): void {
+    this.isDeleteAllJoined = isAllChecked;
+    for (let i = 0; i < this.joinedMembers.length; i++)
+      this.joinedMembers[i].checked = isAllChecked;
+
+  }
+
+  public setAllMembersChecked(isAllChecked: boolean): void {
+    this.isCopyAllMembers = isAllChecked;
+    for (let i = 0; i < this.membersList.length; i++)
+      this.membersList[i].checked = isAllChecked;
+  }
+
+  //How much checked joined members
+  public countChecked(isJoined: boolean = true): number {
+    let res = 0;
+    //For joined checkbox
+    if (isJoined) this.joinedMembers.map(m => m.checked ? res++ : {});
+    //For members checkbox
+    else this.membersList.map(m => m.checked ? res++ : {});
+    return res;
   }
 
   public noReturnPredicate(): boolean {
     return false;
   }
 
+  test() {
+    console.log(this.joinedMembers);
+  }
 
 }

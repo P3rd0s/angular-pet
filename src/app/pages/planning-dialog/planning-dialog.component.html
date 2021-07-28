@@ -75,7 +75,12 @@
       <div cdkDropListGroup>
         <div class="example-container">
           <h2>Все пользователи</h2>
-
+          <mat-checkbox class="example-margin"
+                        [checked]="isCopyAllMembers"
+                        [indeterminate]="someChecked(false)"
+                        (change)="setAllMembersChecked($event.checked)">
+            Все пользователи
+          </mat-checkbox>
           <div
             cdkDropList
             [cdkDropListData]="membersList"
@@ -84,30 +89,14 @@
             [cdkDropListEnterPredicate]="noReturnPredicate"
             (cdkDropListDropped)="drop($event)">
             <div class="example-box" *ngFor="let item of membersList; let i = index"
-                 (click)="onTouch($event, i)"
                  cdkDrag
                  (cdkDragStarted)="onDragStarted($event, i)">
 
-              <div class="item-placeholder" *cdkDragPlaceholder>
-                <ng-container *ngIf="selectedMembers.length > 0 else single_placeholder">
-                  <div *ngFor="let selectedMember of selectedMembers" class="item-selected">
-                    <div>{{selectedMember.name}}</div>
-                  </div>
-                </ng-container>
+              <mat-checkbox [(ngModel)]="item.checked"
+                            (ngModelChange)="updateAllChecked(false)">
+                {{item.name}}
+              </mat-checkbox>
 
-                <ng-template #single_placeholder>
-                  <div class="item">{{item.name}}</div>
-                </ng-template>
-              </div>
-
-              <ng-container *ngIf="!(item.checked && isDragging)">
-                <div [ngClass]="item.checked ?  'item-selected' : 'item'">
-                  {{item.name}}
-                </div>
-              </ng-container>
-
-
-<!--              {{item.name}}-->
             </div>
           </div>
         </div>
@@ -115,12 +104,27 @@
         <div class="example-container">
           <h2>Участники мероприятия</h2>
 
+          <mat-checkbox class="example-margin"
+                        [checked]="isDeleteAllJoined"
+                        [indeterminate]="someChecked()"
+                        (change)="setAllJoinedChecked($event.checked)">
+            Все пользователи
+          </mat-checkbox>
+          <button [hidden]="countChecked()==0">del</button>
           <div
             cdkDropList
-            [cdkDropListData]="planning.members"
+            [cdkDropListData]="joinedMembers"
             class="example-list"
             (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of planning.members" cdkDrag>{{item.name}}</div>
+            <div class="example-box" *ngFor="let item of joinedMembers; let i = index"
+                 cdkDrag>
+              <mat-checkbox [(ngModel)]="item.checked"
+                            (ngModelChange)="updateAllChecked()">
+                {{item.name}}
+              </mat-checkbox>
+
+              <button (click)="countChecked()">del</button>
+            </div>
           </div>
         </div>
       </div>
