@@ -25,7 +25,7 @@ import {moveItemInArray} from "@angular/cdk/drag-drop";
 export class PlanningDialogComponent implements OnInit {
 
   //Current edit planning
-  public planning: Planning = {
+  public planning: any = {
     //dont forget check this case
     id: -1,
     title: ProgramTitle["Вклады: теория и практика"],
@@ -47,13 +47,7 @@ export class PlanningDialogComponent implements OnInit {
   //For drag and drop few members
   public isDragging: boolean = false;
 
-  //For each event
-  public formX: FormGroup = new FormGroup({
-    eventName: new FormControl(),
-    trainer: new FormControl(),
-    date: new FormControl(),
-    time: new FormControl()
-  });
+
   //Any type to avoid problems in html
   public formArr: any = new FormArray([]);
 
@@ -87,14 +81,17 @@ export class PlanningDialogComponent implements OnInit {
   };
 
 
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlanningDialogData,
               public planningService: PlanningService) {
 
     //First 3 events in dialog
-    this.formArr.push(this.formX);
-    this.formArr.push(this.formX);
-    this.formArr.push(this.formX);
+    for(let i = 0; i < 3; i++)
+      this.formArr.push(new FormGroup({
+        eventName: new FormControl(),
+        trainer: new FormControl(),
+        date: new FormControl(),
+        time: new FormControl()
+      }));
   }
 
   ngOnInit(): void {
@@ -103,26 +100,29 @@ export class PlanningDialogComponent implements OnInit {
   }
 
   public getPlanningInfo(): void {
-    this.planningService.getTask(this.data.id)
-      .pipe(take<Planning>(1))
-      .subscribe(pl => {
-        this.planning = pl;
-        this.joinedMembers = [...this.planning.members];//Object.assign(this.planning.members, {checked: false});
 
-        if (this.planning.events.length) {
-          //get 3 (last) events
-          this.planning.events.slice(Math.max(this.planning.events.length - this.formArr.length, 0))
-            .map((event, idx) => this.formArr.setControl(idx,
-              new FormGroup({
-                eventName: new FormControl(event.eventName),
-                trainer: new FormControl(event.trainer),
-                date: new FormControl(new Date(event.date)),
-                time: new FormControl(new Date(event.date).toString().slice(16, 21))
-              })
-            ));
-        }
+    //Take data from server, or create new planning
+    if (this.data.id != -1)
+      this.planningService.getTask(this.data.id)
+        .pipe(take<Planning>(1))
+        .subscribe(pl => {
+          this.planning = pl;
+          this.joinedMembers = [...this.planning.members];//Object.assign(this.planning.members, {checked: false});
 
-      });
+          if (this.planning.events.length) {
+            //get 3 (last) events
+            this.planning.events.slice(Math.max(this.planning.events.length - this.formArr.length, 0))
+              .map((event:any, idx: any) => this.formArr.setControl(idx,
+                new FormGroup({
+                  eventName: new FormControl(event.eventName),
+                  trainer: new FormControl(event.trainer),
+                  date: new FormControl(new Date(event.date)),
+                  time: new FormControl(new Date(event.date).toString().slice(16, 21))
+                })
+              ));
+          }
+
+        });
   }
 
   public memberSubscription(list: Member[]): void {
@@ -206,9 +206,18 @@ export class PlanningDialogComponent implements OnInit {
     });
 
     //Update data, put to server
-    this.planningService.updateTask(this.planning)
-      .pipe(take<Planning>(1))
-      .subscribe((updated: Planning) => this.planning = updated);
+    if (this.data.id != -1)
+      this.planningService.updateTask(this.planning)
+        .pipe(take<Planning>(1))
+        .subscribe((updated: Planning) => this.planning = updated);
+    //Send new planning
+    else {
+      //delete this.planning.id;
+      delete this.planning.id;
+      this.planningService.addTask(this.planning as Planning)
+        .pipe(take<Planning>(1))
+        .subscribe((added: Planning) => this.planning = added);
+    }
 
   }
 

@@ -17,6 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
+
 export interface PlanningDialogData {
   id: number;
 }
@@ -160,25 +161,28 @@ export class PlanningComponent implements OnInit {
 
 
   public openPlanningDialog(id: number): void {
-    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data : {id: id}});
+    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}});
     confirmDialog.afterClosed()
       .pipe(take<TablePlanning>(1))
       .subscribe(isTrue => {
 
         //Check if save button pressed
-        if(isTrue) {
+        if (isTrue) {
+
+          if (id == -1) this.tableHandler();
 
           //Update row if need it, without get new table from server
-          this.planningsService.getTask(id)
-            .pipe(take<Planning>(1))
-            .subscribe(pl => {
-              let row = this.planningsService.planningToTableRow(pl);
-              this.dataSource.data = this.dataSource.data.map((oldRow: any) => {
-                if(oldRow.id === row.id) oldRow = row;
-                return oldRow;
-              });
-              this.table?.renderRows();
-            })
+          else
+            this.planningsService.getTask(id)
+              .pipe(take<Planning>(1))
+              .subscribe(pl => {
+                let row = this.planningsService.planningToTableRow(pl);
+                this.dataSource.data = this.dataSource.data.map((oldRow: any) => {
+                  if (oldRow.id === row.id) oldRow = row;
+                  return oldRow;
+                });
+                this.table?.renderRows();
+              })
         }
       });
 
