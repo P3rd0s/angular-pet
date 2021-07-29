@@ -150,11 +150,18 @@ export class PlanningDialogComponent implements OnInit {
   }
 
   public resetFilters(): void {
+
+    this.experienceControl.setValue('');
+    this.positionControl.setValue('');
+    this.groupControl.setValue('');
+    console.log(this.experienceControl.value);
+    this.searchText = ''
     this.membersFilter = {
       group: -1,
       position: -1,
       experience: -1
     };
+    this.filterHandler();
   }
 
   public filterHandler() {

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, OnInit, ViewChild, Inject, Output} from '@angular/core';
 import {
   getEnumKeys,
   getEnumNames, Planning,
@@ -17,6 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
+import { EventEmitter } from '@angular/core';
 
 export interface PlanningDialogData {
   id: number;
@@ -158,7 +159,6 @@ export class PlanningComponent implements OnInit {
     this.planningsService.deleteTask(id).subscribe();
     this.tableHandler();
   }
-
 
   public openPlanningDialog(id: number): void {
     const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}});

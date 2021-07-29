@@ -1,72 +1,85 @@
 <div class="planning-page">
-  <button (click)="openPlanningDialog(-1)" class="add-button-clear">
-    Запланировать
-  </button>
-  <div class="current-path">
-    <p>Главная - планирование</p>
+  <!--  <button (click)="openPlanningDialog(-1)" class="add-button">-->
+  <!--    Запланировать-->
+  <!--  </button>-->
+  <div class="subheader">
+    <div class="current-path">
+      <p>Главная - планирование</p>
+    </div>
+    <div class="route-title">
+      <mat-icon class="icon" svgIcon="planning"></mat-icon>
+      <h1 class="subpage-title">Планирование</h1>
+    </div>
   </div>
-  <div class="path-title">
-    <mat-icon></mat-icon>
-    <h1>Планирование</h1>
-  </div>
 
-  <mat-tab-group>
-    <mat-tab label="Групповое">
+  <mat-tab-group class="planning-type">
+    <mat-tab class="type-tab" label="Групповое">
 
 
-      <div class="search-filter-panel">
-        <div class="find-filter-box">
-          <mat-form-field class="search-form-field" appearance="fill">
-            <mat-label>Search...</mat-label>
-            <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="tableHandler()">
-            <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
-                    (click)="searchText='';tableHandler()">
-              <mat-icon>close</mat-icon>
-            </button>
+        <div class="main-filters">
+          <div class="find-filter-box">
+            <mat-form-field class="search-form" appearance="fill">
+              <mat-icon class="icon" svgIcon="search"></mat-icon>
+              <mat-label>
+                Поиск
+              </mat-label>
+              <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="tableHandler()">
+              <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
+                      (click)="searchText='';tableHandler()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Программа</mat-label>
+            <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+            <mat-select #matSelectTitle
+                        [formControl]="titlesSelect"
+                        (ngModelChange)="tableFiltering.programTitle=titlesSelect.value; tableHandler();">
+              <mat-option (click)="resetTitleFilter()" value="Все">Все</mat-option>
+              <mat-option *ngFor="let num of titlesVals" [value]="num">
+                {{titlesNames[num]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Период</mat-label>
+            <input #dateInput matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
+                   [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Статус</mat-label>
+            <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+            <mat-select #matSelectStatus
+                        [formControl]="statusSelect"
+                        (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
+              <mat-option (click)="tableFiltering.status=0" value="Все">Все</mat-option>
+              <mat-option *ngFor="let num of statusVals" [value]="num">
+                {{statusNames[num - 1]}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Программа</mat-label>
-          <mat-select #matSelectTitle
-                      [formControl]="titlesSelect"
-                      (ngModelChange)="tableFiltering.programTitle=titlesSelect.value; tableHandler();">
-            <mat-option (click)="resetTitleFilter()">Все</mat-option>
-            <mat-option *ngFor="let num of titlesVals" [value]="num">
-              {{titlesNames[num]}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Период</mat-label>
-          <input #dateInput matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
-                 [matDatepicker]="picker">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker startView="multi-year"></mat-datepicker>
-        </mat-form-field>
-      </div>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Статус</mat-label>
-        <mat-select #matSelectStatus
-                    [formControl]="statusSelect"
-                    (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
-          <mat-option (click)="tableFiltering.status=0">Все</mat-option>
-          <mat-option *ngFor="let num of statusVals" [value]="num">
-            {{statusNames[num - 1]}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
 
       <div class="filters-footer">
-        <p>34 сессии</p>
 
-        <button (click)="isAddFiltersOpened = !isAddFiltersOpened" mat-stroked-button>Настроить фильтр</button>
+<!--        или сесси(Й/Я)-->
+        <p>{{dataSource.data.length}} сессии</p>
+
+        <button class="filter-button" (click)="isAddFiltersOpened = !isAddFiltersOpened">
+          <mat-icon class="icon" svgIcon="filter"></mat-icon>
+          Настроить фильтр
+        </button>
 
         <ng-container *ngIf="isAddFiltersOpened">
           <mat-form-field class="filter-trainer-field" appearance="fill">
-            <mat-label>Тренер...</mat-label>
+            <mat-label>Тренер</mat-label>
             <input matInput type="text" [(ngModel)]="tableFiltering.trainer" (ngModelChange)="tableHandler()">
             <button *ngIf="tableFiltering.trainer" matSuffix mat-icon-button aria-label="Clear"
                     (click)="tableFiltering.trainer='';tableHandler()">
@@ -85,10 +98,13 @@
           </mat-form-field>
         </ng-container>
 
-        <button (click)="resetFilters(); tableHandler()" mat-stroked-button>Сбросить</button>
+        <button class="reset-filters-button" (click)="resetFilters(); tableHandler()">
+          <mat-icon class="icon" svgIcon="x"></mat-icon>
+          Сбросить
+        </button>
 
       </div>
-      <div class="mat-elevation-z5 plannings-table">
+      <div class="plannings-table">
 
         <table #table class="plannings-rows" mat-table [dataSource]="dataSource" matSort
                (matSortChange)="this.sortBy=$event;tableHandler()">
@@ -115,22 +131,30 @@
 
           <ng-container matColumnDef="progress">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Прогресс</th>
-            <td mat-cell *matCellDef="let planningRow"> {{planningRow.progress}}%</td>
+            <td mat-cell *matCellDef="let planningRow">
+              <ng-container *ngIf="planningRow.progress!==100; else complete">
+                <mat-icon class="icon" svgIcon="progress"></mat-icon>
+              </ng-container>
+              <ng-template #complete>
+                <mat-icon class="icon" svgIcon="ok"></mat-icon>
+              </ng-template>
+              {{planningRow.progress}} %
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="menu">
             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-            <td mat-cell *matCellDef="let planningRow">
+            <td class="options-menu" mat-cell *matCellDef="let planningRow">
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
                 <button (click)="openPlanningDialog(planningRow.id)" mat-menu-item>
-                  <mat-icon>dialpad</mat-icon>
+                  <mat-icon class="icon" svgIcon="edit" ></mat-icon>
                   <span>Редактировать</span>
                 </button>
                 <button (click)="deletePlanning(planningRow.id)" mat-menu-item>
-                  <mat-icon>notifications_off</mat-icon>
+                  <mat-icon class="icon" svgIcon="del"></mat-icon>
                   <span>Удалить слот</span>
                 </button>
               </mat-menu>

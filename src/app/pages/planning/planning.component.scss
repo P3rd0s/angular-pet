@@ -1,12 +1,161 @@
-.planning-page{
+@import "../../../UI";
+
+.planning-page {
   height: 100%;
+  padding: 0 67px;
+  background: $back;
 
-  .plannings-table{
+  .subheader {
+    height: 88px;
+  }
+
+  .current-path {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+
+    color: $secondary-text;
+  }
+
+  .route-title {
+    display: flex;
+
+    .icon {
+      height: 40px;
+      margin-right: 15px;
+    }
+
+    .subpage-title {
+      font-family: 'Montserrat', sans-serif;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 38px;
+      line-height: 40px;
+      margin: 0;
+    }
+  }
+
+  .planning-type {
+
+    ::ng-deep {
+
+      .mat-tab-label {
+        padding: 0;
+        margin-right: 20px;
+        min-width: auto;
+      }
+
+      .mat-tab-label-content {
+        font-weight: 500 !important;
+        font-size: 12px !important;
+        line-height: 16px;
+      }
+
+      .mat-tab-label-active {
+        opacity: 1;
+      }
+
+      .mat-ink-bar {
+        background: $prim;
+        border-radius: 2px;
+      }
+    }
+
+
+    .main-filters {
+      display: flex;
+      margin-top: 48px;
+      @extend .form-field;
+
+      .search-form {
+
+        ::ng-deep {
+          .mat-form-field-flex {
+            padding-left: 26px;
+          }
+          .mat-form-field-label {
+            top: 1.69875em;
+          }
+          .mat-form-field-label-wrapper {
+            top: -22px;
+          }
+        }
+      }
+
+    }
+
+    .filters-footer {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+
+      @extend .form-field;
+
+
+
+      p {
+        color: $secondary-text;
+        font-size: 12px;
+        margin-right: 92px;
+        margin-bottom: 0;
+      }
+
+      .filter-button {
+        @extend .iconized-button;
+        margin-right: 46px;
+      }
+
+      .reset-filters-button {
+        @extend .iconized-button;
+        color: $secondary-text;
+        margin-left: 46px;
+
+        .icon{
+          width: 9px;
+          margin-right: 10px;
+        }
+      }
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  .plannings-table {
     margin: auto;
-    width: 90vw;
+    width: 100%;
 
-    .plannings-rows{
-      width: 90vw;
+
+    .mat-sort-header, .mat-cell {
+      padding: 0;
+      border: none;
+    }
+
+    .plannings-rows {
+      width: 100%;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      position: relative;
+      top: 2px;
+    }
+
+    .options-menu{
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

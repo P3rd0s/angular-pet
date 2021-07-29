@@ -126,6 +126,7 @@
         <p>{{membersList.length}} пользователя</p>
 
         <button mat-button [matMenuTriggerFor]="menu">Настроить</button>
+        <button mat-button (click)="resetFilters()">Сбросить</button>
         <mat-menu #menu="matMenu">
           <p>Системные поля</p>
           <div mat-menu-item>

@@ -20,6 +20,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {PlanningDialogModule} from "./pages/planning-dialog/planning-dialog.module";
 
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -35,7 +36,8 @@ import {PlanningDialogModule} from "./pages/planning-dialog/planning-dialog.modu
     MatButtonModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
+      InMemoryDataService, { dataEncapsulation: false, passThruUnknownUrl: true },
+
     ),
     MatNativeDateModule,
     MatDialogModule,
