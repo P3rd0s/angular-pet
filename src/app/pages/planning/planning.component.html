@@ -16,60 +16,60 @@
     <mat-tab class="type-tab" label="Групповое">
 
 
-        <div class="main-filters">
-          <div class="find-filter-box">
-            <mat-form-field class="search-form" appearance="fill">
-              <mat-icon class="icon" svgIcon="search"></mat-icon>
-              <mat-label>
-                Поиск
-              </mat-label>
-              <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="tableHandler()">
-              <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
-                      (click)="searchText='';tableHandler()">
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <mat-form-field appearance="fill">
-            <mat-label>Программа</mat-label>
-            <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
-            <mat-select #matSelectTitle
-                        [formControl]="titlesSelect"
-                        (ngModelChange)="tableFiltering.programTitle=titlesSelect.value; tableHandler();">
-              <mat-option (click)="resetTitleFilter()" value="Все">Все</mat-option>
-              <mat-option *ngFor="let num of titlesVals" [value]="num">
-                {{titlesNames[num]}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Период</mat-label>
-            <input #dateInput matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
-                   [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker startView="multi-year"></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field appearance="fill">
-            <mat-label>Статус</mat-label>
-            <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
-            <mat-select #matSelectStatus
-                        [formControl]="statusSelect"
-                        (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
-              <mat-option (click)="tableFiltering.status=0" value="Все">Все</mat-option>
-              <mat-option *ngFor="let num of statusVals" [value]="num">
-                {{statusNames[num - 1]}}
-              </mat-option>
-            </mat-select>
+      <div class="main-filters">
+        <div class="find-filter-box">
+          <mat-form-field class="search-form" appearance="fill">
+            <mat-icon class="icon" svgIcon="search"></mat-icon>
+            <mat-label>
+              Поиск
+            </mat-label>
+            <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="tableHandler()">
+            <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchText='';tableHandler()">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
         </div>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Программа</mat-label>
+          <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+          <mat-select #matSelectTitle
+                      [formControl]="titlesSelect"
+                      (ngModelChange)="tableFiltering.programTitle=titlesSelect.value; tableHandler();">
+            <mat-option (click)="resetTitleFilter()" value="Все">Все</mat-option>
+            <mat-option *ngFor="let num of titlesVals" [value]="num">
+              {{titlesNames[num]}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width period-form" appearance="fill">
+          <mat-label>Период</mat-label>
+          <input #dateInput matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
+                 [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Статус</mat-label>
+          <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+          <mat-select #matSelectStatus
+                      [formControl]="statusSelect"
+                      (ngModelChange)="tableFiltering.status=statusSelect.value; tableHandler();">
+            <mat-option (click)="tableFiltering.status=0" value="Все">Все</mat-option>
+            <mat-option *ngFor="let num of statusVals" [value]="num">
+              {{statusNames[num - 1]}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
 
       <div class="filters-footer">
 
-<!--        или сесси(Й/Я)-->
+        <!--        или сесси(Й/Я)-->
         <p>{{dataSource.data.length}} сессии</p>
 
         <button class="filter-button" (click)="isAddFiltersOpened = !isAddFiltersOpened">
@@ -150,7 +150,7 @@
               </button>
               <mat-menu #menu="matMenu">
                 <button (click)="openPlanningDialog(planningRow.id)" mat-menu-item>
-                  <mat-icon class="icon" svgIcon="edit" ></mat-icon>
+                  <mat-icon class="icon" svgIcon="edit"></mat-icon>
                   <span>Редактировать</span>
                 </button>
                 <button (click)="deletePlanning(planningRow.id)" mat-menu-item>

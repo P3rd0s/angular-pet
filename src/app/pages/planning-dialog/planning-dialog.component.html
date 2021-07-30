@@ -1,235 +1,244 @@
-<h1 mat-dialog-title>
-  Планирование
-</h1>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button (click)="saveChanges()" [mat-dialog-close]="true" cdkFocusInitial>Install</button>
-</mat-dialog-actions>
-<div *ngIf="planning" class="planning-content" mat-dialog-content>
+<div class="dialog-page">
+  <div class="dialog-header">
+    <h1 mat-dialog-title>
+      Планирование
+    </h1>
+    <mat-dialog-actions align="end">
+      <button class="btn" (click)="saveChanges()" [mat-dialog-close]="true"><mat-icon class="icon" svgIcon="ok"></mat-icon></button>
+      <button class="btn" mat-dialog-close><mat-icon class="icon" svgIcon="x"></mat-icon></button>
+    </mat-dialog-actions>
+  </div>
+  <div *ngIf="planning" class="planning-content" mat-dialog-content>
 
-  <mat-tab-group>
-    <mat-tab label="Основное">
+    <mat-tab-group>
+      <mat-tab label="Основное">
 
-      <mat-form-field appearance="fill">
-        <mat-label>Программа</mat-label>
-        <mat-select placeholder="{{programTitleEnum[planning.title]}}"
-                    [(ngModel)]="planning.title">
-          <mat-option *ngFor="let num of getEnumKeys(programTitleEnum)" [value]="num">
-            {{programTitleEnum[num]}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-
-      <h2>Мероприятие, дата и время проведения</h2>
-
-      <div *ngFor="let form of formArr.controls; index as idx">
-        <form [formGroup]="form">
-          <div class="event">
-
-            <mat-form-field appearance="fill">
-              <mat-label>Мероприятие</mat-label>
-              <input matInput placeholder="Название мероприятия" formControlName="eventName">
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-              <mat-label>Дата</mat-label>
-              <input matInput [matDatepicker]="dp" formControlName="date">
-              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-              <mat-datepicker #dp></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Время</mat-label>
-              <input matInput type="time" formControlName="time" placeholder="Время">
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-              <mat-label>Тренер</mat-label>
-              <mat-select formControlName="trainer">
-                <mat-option *ngFor="let num of getEnumKeys(trainerEnum)" [value]="num">
-                  {{trainerEnum[num]}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-
-          </div>
-        </form>
-      </div>
-
-      <h2>Условия записи по коду</h2>
-      <mat-radio-group
-        aria-labelledby="example-radio-group-label"
-        [(ngModel)]="planning.joinCondition">
-        <mat-radio-button class="example-radio-button" *ngFor="let num of getEnumKeys(joinCondEnum)" [value]="num">
-          {{joinCondEnum[num]}}
-        </mat-radio-button>
-      </mat-radio-group>
-    </mat-tab>
-
-
-    <mat-tab label="Участники">
-
-      <ng-container *ngIf="filtersDisplayed.search">
-        <mat-form-field class="search-form-field" appearance="fill">
-          <mat-label>Поиск</mat-label>
-          <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterHandler()">
-          <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
-                  (click)="searchText='';filterHandler()">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-      </ng-container>
-
-      <ng-container *ngIf="filtersDisplayed.group">
-        <mat-form-field appearance="fill">
-          <mat-label>Группа</mat-label>
-          <mat-select [formControl]="groupControl"
-                      (ngModelChange)="membersFilter.group=groupControl.value; filterHandler();">
-            <mat-option (click)="membersFilter.group=-1">Все</mat-option>
-            <mat-option *ngFor="let num of getEnumKeys(groupEnum)" [value]="num">
-              {{groupEnum[num]}}
+        <div class="large-form">
+        <mat-form-field class="planning-name" appearance="fill">
+          <mat-label>Программа</mat-label>
+          <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+          <mat-select placeholder="{{programTitleEnum[planning.title]}}"
+                      [(ngModel)]="planning.title">
+            <mat-option *ngFor="let num of getEnumKeys(programTitleEnum)" [value]="num">
+              {{programTitleEnum[num]}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </ng-container>
-
-      <ng-container *ngIf="filtersDisplayed.position">
-        <mat-form-field appearance="fill">
-          <mat-label>Должность</mat-label>
-          <mat-select [formControl]="positionControl"
-                      (ngModelChange)="membersFilter.position=positionControl.value; filterHandler();">
-            <mat-option (click)="membersFilter.position=-1">Все</mat-option>
-            <mat-option *ngFor="let num of getEnumKeys(positionEnum)" [value]="num">
-              {{positionEnum[num]}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </ng-container>
-
-      <ng-container *ngIf="filtersDisplayed.experience">
-        <mat-form-field appearance="fill">
-          <mat-label>Стаж</mat-label>
-          <mat-select [formControl]="experienceControl"
-                      (ngModelChange)="membersFilter.experience=experienceControl.value; filterHandler();">
-            <mat-option (click)="membersFilter.experience=-1">Все</mat-option>
-            <mat-option *ngFor="let num of getEnumKeys(experienceEnum)" [value]="num">
-              {{experienceEnum[num]}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </ng-container>
+        </div>
 
 
-      <div class="filter-info">
-        <p>{{membersList.length}} пользователя</p>
+        <h2 class="subtitle">Мероприятие, дата и время проведения</h2>
 
-        <button mat-button [matMenuTriggerFor]="menu">Настроить</button>
-        <button mat-button (click)="resetFilters()">Сбросить</button>
-        <mat-menu #menu="matMenu">
-          <p>Системные поля</p>
-          <div mat-menu-item>
-            <mat-checkbox (click)="$event.stopPropagation();"
-              [(ngModel)]="filtersDisplayed.search">
-              Поиск
-            </mat-checkbox>
-          </div>
-          <div mat-menu-item>
-            <mat-checkbox (click)="$event.stopPropagation();"
-              [(ngModel)]="filtersDisplayed.group">
-              Группа
-            </mat-checkbox>
-          </div>
-          <div mat-menu-item>
-            <mat-checkbox (click)="$event.stopPropagation();"
-              [(ngModel)]="filtersDisplayed.position">
-              Должность
-            </mat-checkbox>
-          </div>
-          <div mat-menu-item>
-            <mat-checkbox (click)="$event.stopPropagation();"
-              [(ngModel)]="filtersDisplayed.experience">
-              Стаж
-            </mat-checkbox>
-          </div>
+        <div *ngFor="let form of formArr.controls; index as idx">
+          <form [formGroup]="form">
+            <div class="event">
 
-          <p>Дополнительные</p>
-          <div mat-menu-item>
-            <mat-checkbox disabled="">
-              Подразделение
-            </mat-checkbox>
-          </div>
-          <div mat-menu-item>
-            <mat-checkbox disabled="">
-              Округ
-            </mat-checkbox>
-          </div>
-          <div mat-menu-item>
-            <mat-checkbox disabled="">
-              Город
-            </mat-checkbox>
-          </div>
-        </mat-menu>
-      </div>
+              <div class="large-form">
+              <mat-form-field class="event-form" appearance="fill">
+                <mat-label>Мероприятие</mat-label>
+                <input matInput placeholder="Название мероприятия" formControlName="eventName">
+              </mat-form-field>
+              </div>
 
-      <div cdkDropListGroup>
-        <div class="example-container">
-          <h2>Все пользователи</h2>
-          <mat-checkbox class="example-margin"
-                        [checked]="isCopyAllMembers"
-                        [indeterminate]="someChecked(false)"
-                        (change)="setAllMembersChecked($event.checked)">
-            Все пользователи
-          </mat-checkbox>
-          <div
-            cdkDropList
-            [cdkDropListData]="membersList"
-            class="example-list"
-            cdkDropListSortingDisabled
-            [cdkDropListEnterPredicate]="noReturnPredicate"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of membersList; let i = index"
-                 cdkDrag
-                 (cdkDragStarted)="isDragging = true">
+              <mat-form-field appearance="fill">
+                <mat-label>Дата</mat-label>
+                <input matInput [matDatepicker]="dp" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp></mat-datepicker>
+              </mat-form-field>
 
-              <mat-checkbox [(ngModel)]="item.checked"
-                            (ngModelChange)="updateAllChecked(false)">
-                {{item.name}}
+              <mat-form-field>
+                <mat-label>Время</mat-label>
+                <input matInput type="time" formControlName="time" placeholder="Время">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Тренер</mat-label>
+                <mat-select formControlName="trainer">
+                  <mat-option *ngFor="let num of getEnumKeys(trainerEnum)" [value]="num">
+                    {{trainerEnum[num]}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+            </div>
+          </form>
+        </div>
+
+        <h2>Условия записи по коду</h2>
+        <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          [(ngModel)]="planning.joinCondition">
+          <mat-radio-button class="example-radio-button" *ngFor="let num of getEnumKeys(joinCondEnum)" [value]="num">
+            {{joinCondEnum[num]}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-tab>
+
+
+      <mat-tab label="Участники">
+
+        <ng-container *ngIf="filtersDisplayed.search">
+          <mat-form-field class="search-form-field" appearance="fill">
+            <mat-label>Поиск</mat-label>
+            <input matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterHandler()">
+            <button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchText='';filterHandler()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="filtersDisplayed.group">
+          <mat-form-field appearance="fill">
+            <mat-label>Группа</mat-label>
+            <mat-select [formControl]="groupControl"
+                        (ngModelChange)="membersFilter.group=groupControl.value; filterHandler();">
+              <mat-option (click)="membersFilter.group=-1">Все</mat-option>
+              <mat-option *ngFor="let num of getEnumKeys(groupEnum)" [value]="num">
+                {{groupEnum[num]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="filtersDisplayed.position">
+          <mat-form-field appearance="fill">
+            <mat-label>Должность</mat-label>
+            <mat-select [formControl]="positionControl"
+                        (ngModelChange)="membersFilter.position=positionControl.value; filterHandler();">
+              <mat-option (click)="membersFilter.position=-1">Все</mat-option>
+              <mat-option *ngFor="let num of getEnumKeys(positionEnum)" [value]="num">
+                {{positionEnum[num]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="filtersDisplayed.experience">
+          <mat-form-field appearance="fill">
+            <mat-label>Стаж</mat-label>
+            <mat-select [formControl]="experienceControl"
+                        (ngModelChange)="membersFilter.experience=experienceControl.value; filterHandler();">
+              <mat-option (click)="membersFilter.experience=-1">Все</mat-option>
+              <mat-option *ngFor="let num of getEnumKeys(experienceEnum)" [value]="num">
+                {{experienceEnum[num]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+
+        <div class="filter-info">
+          <p>{{membersList.length}} пользователя</p>
+
+          <button mat-button [matMenuTriggerFor]="menu">Настроить</button>
+          <button mat-button (click)="resetFilters()">Сбросить</button>
+          <mat-menu #menu="matMenu">
+            <p>Системные поля</p>
+            <div mat-menu-item>
+              <mat-checkbox (click)="$event.stopPropagation();"
+                            [(ngModel)]="filtersDisplayed.search">
+                Поиск
               </mat-checkbox>
+            </div>
+            <div mat-menu-item>
+              <mat-checkbox (click)="$event.stopPropagation();"
+                            [(ngModel)]="filtersDisplayed.group">
+                Группа
+              </mat-checkbox>
+            </div>
+            <div mat-menu-item>
+              <mat-checkbox (click)="$event.stopPropagation();"
+                            [(ngModel)]="filtersDisplayed.position">
+                Должность
+              </mat-checkbox>
+            </div>
+            <div mat-menu-item>
+              <mat-checkbox (click)="$event.stopPropagation();"
+                            [(ngModel)]="filtersDisplayed.experience">
+                Стаж
+              </mat-checkbox>
+            </div>
 
+            <p>Дополнительные</p>
+            <div mat-menu-item>
+              <mat-checkbox disabled="">
+                Подразделение
+              </mat-checkbox>
+            </div>
+            <div mat-menu-item>
+              <mat-checkbox disabled="">
+                Округ
+              </mat-checkbox>
+            </div>
+            <div mat-menu-item>
+              <mat-checkbox disabled="">
+                Город
+              </mat-checkbox>
+            </div>
+          </mat-menu>
+        </div>
+
+        <div cdkDropListGroup>
+          <div class="example-container">
+            <h2>Все пользователи</h2>
+            <mat-checkbox class="example-margin"
+                          [checked]="isCopyAllMembers"
+                          [indeterminate]="someChecked(false)"
+                          (change)="setAllMembersChecked($event.checked)">
+              Все пользователи
+            </mat-checkbox>
+            <div
+              cdkDropList
+              [cdkDropListData]="membersList"
+              class="example-list"
+              cdkDropListSortingDisabled
+              [cdkDropListEnterPredicate]="noReturnPredicate"
+              (cdkDropListDropped)="drop($event)">
+              <div class="example-box" *ngFor="let item of membersList; let i = index"
+                   cdkDrag
+                   (cdkDragStarted)="isDragging = true">
+
+                <mat-checkbox [(ngModel)]="item.checked"
+                              (ngModelChange)="updateAllChecked(false)">
+                  {{item.name}}
+                </mat-checkbox>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="example-container">
+            <h2>Участники мероприятия</h2>
+
+            <mat-checkbox class="example-margin"
+                          [checked]="isDeleteAllJoined"
+                          [indeterminate]="someChecked()"
+                          (change)="setAllJoinedChecked($event.checked)">
+              Все пользователи
+            </mat-checkbox>
+            <button [hidden]="countChecked()==0" (click)="deleteCheckedJoined()">del</button>
+            <div
+              cdkDropList
+              [cdkDropListData]="joinedMembers"
+              class="example-list"
+              (cdkDropListDropped)="drop($event)">
+              <div class="example-box" *ngFor="let item of joinedMembers; let i = index"
+                   cdkDrag>
+                <mat-checkbox [(ngModel)]="item.checked"
+                              (ngModelChange)="updateAllChecked()">
+                  {{item.name}}
+                </mat-checkbox>
+
+                <button (click)="deleteOneJoined(item.id)">del</button>
+              </div>
             </div>
           </div>
         </div>
+      </mat-tab>
+    </mat-tab-group>
 
-        <div class="example-container">
-          <h2>Участники мероприятия</h2>
-
-          <mat-checkbox class="example-margin"
-                        [checked]="isDeleteAllJoined"
-                        [indeterminate]="someChecked()"
-                        (change)="setAllJoinedChecked($event.checked)">
-            Все пользователи
-          </mat-checkbox>
-          <button [hidden]="countChecked()==0" (click)="deleteCheckedJoined()">del</button>
-          <div
-            cdkDropList
-            [cdkDropListData]="joinedMembers"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of joinedMembers; let i = index"
-                 cdkDrag>
-              <mat-checkbox [(ngModel)]="item.checked"
-                            (ngModelChange)="updateAllChecked()">
-                {{item.name}}
-              </mat-checkbox>
-
-              <button (click)="deleteOneJoined(item.id)">del</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-
+  </div>
 </div>

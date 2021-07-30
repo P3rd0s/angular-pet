@@ -161,7 +161,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public openPlanningDialog(id: number): void {
-    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}});
+    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}, position: {right: '0'}});
     confirmDialog.afterClosed()
       .pipe(take<TablePlanning>(1))
       .subscribe(isTrue => {

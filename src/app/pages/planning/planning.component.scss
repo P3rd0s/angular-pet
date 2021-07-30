@@ -38,47 +38,25 @@
 
   .planning-type {
 
-    ::ng-deep {
-
-      .mat-tab-label {
-        padding: 0;
-        margin-right: 20px;
-        min-width: auto;
-      }
-
-      .mat-tab-label-content {
-        font-weight: 500 !important;
-        font-size: 12px !important;
-        line-height: 16px;
-      }
-
-      .mat-tab-label-active {
-        opacity: 1;
-      }
-
-      .mat-ink-bar {
-        background: $prim;
-        border-radius: 2px;
-      }
-    }
+    @extend .mat-tab-custom;
 
 
     .main-filters {
       display: flex;
       margin-top: 48px;
-      @extend .form-field;
+
+      @extend .input-form-field;
+
+      .find-filter-box, .period-form {
+        @extend .input-form-field;
+      }
+
+
 
       .search-form {
-
         ::ng-deep {
           .mat-form-field-flex {
             padding-left: 26px;
-          }
-          .mat-form-field-label {
-            top: 1.69875em;
-          }
-          .mat-form-field-label-wrapper {
-            top: -22px;
           }
         }
       }
@@ -91,7 +69,6 @@
       margin-bottom: 40px;
 
       @extend .form-field;
-
 
 
       p {
@@ -110,8 +87,9 @@
         @extend .iconized-button;
         color: $secondary-text;
         margin-left: 46px;
+        font-weight: 600;
 
-        .icon{
+        .icon {
           width: 9px;
           margin-right: 10px;
         }
@@ -120,16 +98,6 @@
     }
 
   }
-
-
-
-
-
-
-
-
-
-
 
 
   .plannings-table {
@@ -153,9 +121,10 @@
       top: 2px;
     }
 
-    .options-menu{
+    .options-menu {
       display: flex;
       justify-content: flex-end;
     }
   }
 }
+
