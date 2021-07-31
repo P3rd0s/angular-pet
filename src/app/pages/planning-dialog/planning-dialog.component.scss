@@ -3,23 +3,106 @@
 .example-container {
   width: 400px;
   max-width: 100%;
-  margin: 0 25px 25px 0;
   display: inline-block;
   vertical-align: top;
 }
 
 .example-list {
-  border: solid 1px #ccc;
-  min-height: 60px;
+  min-height: 30px;
   background: white;
   border-radius: 4px;
   overflow: hidden;
   display: block;
 }
 
+::ng-deep .mat-menu-panel {
+  .mat-menu-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    > p {
+      text-align: center;
+      color: $secondary-text;
+      margin-top: 15px;
+    }
+  }
+
+  .mat-menu-item {
+    height: 36px;
+    padding: 0;
+    align-items: center;
+  }
+
+  .mat-checkbox {
+    width: 100%;
+
+    .mat-checkbox-layout {
+      width: 100%;
+      justify-content: space-between;
+
+      .mat-checkbox-label {
+        order: 0;
+      }
+
+      .mat-checkbox-inner-container {
+        order: 1;
+      }
+    }
+  }
+}
+
+mat-checkbox {
+
+  width: auto;
+
+  ::ng-deep .mat-checkbox-layout {
+    align-items: center;
+  }
+
+  ::ng-deep .mat-checkbox-label {
+    height: 16px;
+    line-height: 16px;
+  }
+
+  ::ng-deep span.mat-checkbox-inner-container {
+    background: #f2f2f2;
+    margin-bottom: 0;
+    margin-top: 0;
+
+    &:hover, &:focus, &:active {
+      background: #e6e6e6;
+    }
+  }
+
+  ::ng-deep .mat-checkbox-frame {
+    border: none;
+  }
+
+  &.mat-checkbox-checked, &.mat-checkbox-indeterminate {
+    ::ng-deep .mat-checkbox-background {
+      background-color: transparent;
+
+      .mat-checkbox-checkmark-path {
+        stroke: $prim !important;
+      }
+
+      .mat-checkbox-mixedmark {
+        background-color: $prim !important;
+      }
+    }
+  }
+
+  ::ng-deep .mat-checkbox-ripple, .mat-checkbox-ripple:focus, .mat-checkbox-ripple:active {
+    background-color: transparent;
+    width: 0;
+    height: 0;
+  }
+}
+
 .example-box {
-  padding: 20px 10px;
-  border-bottom: solid 1px #ccc;
+  padding: 10px 8px;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: row;
@@ -28,7 +111,55 @@
   box-sizing: border-box;
   cursor: move;
   background: white;
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 4px;
+
+  &:hover {
+    background: $hover-checkbox;
+
+    ::ng-deep span.mat-checkbox-inner-container {
+      background: #e6e6e6;
+    }
+  }
+
+  ::ng-deep span.mat-checkbox-inner-container {
+    margin-right: 44px;
+  }
+}
+
+.trashbox-button {
+  height: 16px;
+  width: 16px;
+  margin-right: 12px;
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.all-check {
+  ::ng-deep span.mat-checkbox-inner-container {
+    margin-right: 8px;
+  }
+}
+
+.joined-list {
+  cursor: auto;
+
+  button {
+    display: none;
+  }
+
+  &:hover button {
+    display: block;
+  }
 }
 
 .cdk-drag-preview {
@@ -109,25 +240,134 @@
 
     @extend .mat-tab-custom;
 
-    ::ng-deep .mat-tab-body-content {
-      overflow-y: hidden;
-    }
-
-    @extend .input-form-field;
-    .large-form {
-      @extend .large-form;
-    }
-
     .subtitle {
       font-weight: bold;
       font-size: 14px;
       line-height: 18px;
     }
 
-
-    .event-form {
-
+    ::ng-deep .mat-tab-body-content {
+      overflow-y: hidden;
     }
+
+    .events-tab {
+      @extend .input-form-field;
+
+      .large-form {
+        @include form-width(100%)
+      }
+
+
+      .event-settings {
+        display: flex;
+        justify-content: flex-end;
+        padding-left: 30px;
+
+        flex-shrink: 0;
+        position: relative;
+
+        > * {
+          width: calc((100%) / 3);
+          margin-left: 15px;
+          @include form-width(100%);
+        }
+
+
+        .date-picker, .time-picker {
+          ::ng-deep mat-form-field .mat-form-field-flex {
+            .mat-form-field-infix {
+              order: 1;
+            }
+
+            .mat-form-field-suffix {
+              order: 0;
+
+              .mat-focus-indicator {
+                justify-content: flex-start;
+              }
+            }
+          }
+        }
+
+      }
+
+
+      mat-radio-button {
+        display: block;
+        margin: 10px 0;
+
+        &.mat-radio-checked {
+          ::ng-deep .mat-radio-outer-circle {
+            background-color: $active;
+          }
+        }
+
+        ::ng-deep {
+          .mat-radio-ripple {
+            display: none;
+          }
+
+          .mat-radio-outer-circle {
+            border: none;
+            background-color: $prim-radio-btn;
+
+            &:hover {
+              background-color: $hover;
+            }
+          }
+
+          .mat-radio-inner-circle {
+            background-color: $prim;
+          }
+        }
+      }
+    }
+
+    .members-tab {
+      display: flex;
+
+      .left-side, .right-side {
+        width: 50%;
+        margin: 0;
+      }
+
+      .left-side {
+        .member-filters {
+          display: flex;
+          flex-wrap: wrap;
+
+          @extend .input-form-field;
+
+          > * {
+            width: 50%;
+            @include form-width(100%);
+          }
+        }
+
+        .settings-panel {
+          display: flex;
+          align-items: center;
+
+          > p {
+            margin: 0;
+          }
+
+          > button {
+            @extend .iconized-button;
+
+            &.reset {
+              color: $secondary-text;
+
+              .icon {
+                width: 14px;
+                height: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+
 
   }
 

@@ -186,6 +186,7 @@ export class PlanningDialogComponent implements OnInit {
       || !event.get('date')
       || !event.get('time')
       || event.get('eventName')?.value == null
+      || event.get('eventName')?.value ==''
       || event.get('trainer')?.value == null
       || event.get('date')?.value == null
       || event.get('time')?.value == null) return undefined;

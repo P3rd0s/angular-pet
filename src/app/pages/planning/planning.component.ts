@@ -17,7 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
-import { EventEmitter } from '@angular/core';
+import {EventEmitter} from '@angular/core';
 
 export interface PlanningDialogData {
   id: number;
@@ -76,8 +76,13 @@ export class PlanningComponent implements OnInit {
   @ViewChild('picker') datePicker?: MatDatepicker<any>;
   @ViewChild('table') table?: MatTable<any>;
 
+
   constructor(public planningsService: PlanningService,
               public dialog: MatDialog) {
+    //Unsubscribe when destroy
+    this.planningsService.callNewPlanningDialog$.subscribe(res => {
+      if (res) this.openPlanningDialog(-1)
+    });
   }
 
   ngOnInit(): void {
@@ -186,7 +191,5 @@ export class PlanningComponent implements OnInit {
         }
       });
 
-
   }
-
 }

@@ -8,6 +8,10 @@ $inactive-text: #9e9e9e;
 $secondary-text: #757575;
 $main-text: #000;
 
+$prim-radio-btn: #f2f2f2;
+$hover-radio-btn: #d5d5d5;
+
+$hover-checkbox: #f6f6f6;
 .interaction-animations {
   &:hover {
     background: $hover;
@@ -130,13 +134,13 @@ $main-text: #000;
   }
 }
 
-.large-form {
+@mixin form-width($width){
   mat-form-field {
-    width: 100%;
+    width: $width;
 
     ::ng-deep {
       .mat-form-field-wrapper {
-        width: 100%;
+        width: $width;
       }
     }
   }

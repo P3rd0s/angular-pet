@@ -2,6 +2,7 @@ import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
 import {PlanningComponent} from "./pages/planning/planning.component";
+import {PlanningService} from "./services/planning.service";
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,14 @@ import {PlanningComponent} from "./pages/planning/planning.component";
 })
 export class AppComponent {
 
+
+  public addPlanning():void{
+    this.planningsService.openDialogCall(true);
+  }
+
   constructor(private matIconRegistry: MatIconRegistry,
-              private domSanitizer: DomSanitizer) {
+              private domSanitizer: DomSanitizer,
+              private planningsService: PlanningService) {
     this.matIconRegistry.addSvgIcon('add',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/add.svg`));
     this.matIconRegistry.addSvgIcon('planning',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/planning.svg`));
     this.matIconRegistry.addSvgIcon('search',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/search.svg`));
@@ -22,6 +29,7 @@ export class AppComponent {
     this.matIconRegistry.addSvgIcon('ok',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/ok.svg`));
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/edit.svg`));
     this.matIconRegistry.addSvgIcon('del',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/del.svg`));
+    this.matIconRegistry.addSvgIcon('trashbox',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/trashbox.svg`));
   }
   title = 'test-project';
 }

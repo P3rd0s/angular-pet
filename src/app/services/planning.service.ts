@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {Sort} from "@angular/material/sort";
 import {
   Member,
@@ -27,10 +27,20 @@ export class PlanningService {
   };
 
 
+
+  //**************************************************************************************************************
+  //******************************----------CALL NEW PLANNING-------------****************************************
+  //****************                                                                               ***************
+  private callNewPlanningDialog = new BehaviorSubject(false);
+  callNewPlanningDialog$ = this.callNewPlanningDialog.asObservable();
+
+  public openDialogCall(newVal: boolean):void {
+    this.callNewPlanningDialog.next(newVal);
+  }
+
   //**************************************************************************************************************
   //******************************----------HELPER FUNCTIONS--------------****************************************
   //****************                                                                               ***************
-  //*******                                                                                               ********
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
@@ -194,7 +204,6 @@ export class PlanningService {
   //**************************************************************************************************************
   //******************************-----------HTTP PLANNINGS---------------****************************************
   //****************                                                                               ***************
-  //*******                                                                                               ********
   public getTasks(): Observable<Planning[]> {
     return this.http.get<Planning[]>(this.planningUrl).pipe(
       catchError(this.handleError<Planning[]>('get plannings', []))
