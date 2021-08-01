@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {PlanningDialogData} from "../planning/planning.component";
 import {PlanningService} from "../../services/planning.service";
@@ -16,6 +16,8 @@ import {
 import {take} from "rxjs/operators";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {moveItemInArray} from "@angular/cdk/drag-drop";
+import {MatSelect} from "@angular/material/select";
+import {MatOption} from "@angular/material/core";
 
 @Component({
   selector: 'app-planning-dialog',
@@ -80,6 +82,9 @@ export class PlanningDialogComponent implements OnInit {
     experience: true
   };
 
+  @ViewChild('group') groupChild?: MatSelect;
+  @ViewChild('position') positionChild?: MatSelect;
+  @ViewChild('experience') experienceChild?: MatSelect;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: PlanningDialogData,
               public planningService: PlanningService) {
@@ -151,10 +156,13 @@ export class PlanningDialogComponent implements OnInit {
 
   public resetFilters(): void {
 
-    this.experienceControl.setValue('');
-    this.positionControl.setValue('');
-    this.groupControl.setValue('');
-    console.log(this.experienceControl.value);
+    this.groupChild?.options.forEach((data:MatOption) => data.deselect());
+    this.positionChild?.options.forEach((data:MatOption) => data.deselect());
+    this.experienceChild?.options.forEach((data:MatOption) => data.deselect());
+
+    // this.experienceControl.setValue('');
+    // this.positionControl.setValue('');
+    // this.groupControl.setValue('');
     this.searchText = ''
     this.membersFilter = {
       group: -1,

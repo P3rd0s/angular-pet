@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Inject, Output} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {
   getEnumKeys,
   getEnumNames, Planning,
@@ -17,7 +17,6 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
-import {EventEmitter} from '@angular/core';
 
 export interface PlanningDialogData {
   id: number;
@@ -90,7 +89,7 @@ export class PlanningComponent implements OnInit {
   }
 
   //Date to readable date in table cell
-  public convertDate(date: Date): string {
+  public convertDate(date: any): string {
     return this.planningsService.convertDate(date);
   }
 
@@ -166,7 +165,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public openPlanningDialog(id: number): void {
-    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}, position: {right: '0'}});
+    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}, position: {right: '-16px'}});
     confirmDialog.afterClosed()
       .pipe(take<TablePlanning>(1))
       .subscribe(isTrue => {

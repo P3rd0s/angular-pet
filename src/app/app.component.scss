@@ -1,13 +1,20 @@
 @import "../UI";
+
 .main-header {
 
   background: #FFFFFF;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
-  .add-planning-button{
+  .add-planning-button {
     @extend .iconized-button;
+    margin-right: 22px;
 
   }
 
+}
+.container, .main-content, .sidenav-container {
+  height: 100%;
+  position: relative;
 }

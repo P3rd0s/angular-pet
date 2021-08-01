@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
-import {PlanningComponent} from "./pages/planning/planning.component";
 import {PlanningService} from "./services/planning.service";
 
 @Component({
@@ -30,6 +29,7 @@ export class AppComponent {
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/edit.svg`));
     this.matIconRegistry.addSvgIcon('del',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/del.svg`));
     this.matIconRegistry.addSvgIcon('trashbox',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/trashbox.svg`));
+    this.matIconRegistry.addSvgIcon('trainer',this.domSanitizer.bypassSecurityTrustResourceUrl(`assets/icons/trainer.svg`));
   }
   title = 'test-project';
 }

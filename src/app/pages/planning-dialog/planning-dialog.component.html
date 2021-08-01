@@ -4,7 +4,7 @@
       Планирование
     </h1>
     <mat-dialog-actions align="end">
-      <button class="btn" (click)="saveChanges()" [mat-dialog-close]="true">
+      <button class="btn ok" (click)="saveChanges()" [mat-dialog-close]="true">
         <mat-icon class="icon" svgIcon="ok"></mat-icon>
       </button>
       <button class="btn" mat-dialog-close>
@@ -66,6 +66,7 @@
 
                   <div class="trainer-form">
                     <mat-form-field appearance="fill">
+                      <mat-icon class="icon" svgIcon="trainer"></mat-icon>
                       <mat-label>Тренер</mat-label>
                       <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
                       <mat-select formControlName="trainer">
@@ -81,7 +82,7 @@
             </form>
           </div>
 
-          <h2 class="subtitle">Условия записи по коду</h2>
+          <h2 class="subtitle conditions">Условия записи по коду</h2>
           <mat-radio-group
             aria-labelledby="example-radio-group-label"
             [(ngModel)]="planning.joinCondition">
@@ -116,7 +117,9 @@
               <ng-container *ngIf="filtersDisplayed.group">
                 <mat-form-field appearance="fill">
                   <mat-label>Группа</mat-label>
-                  <mat-select [formControl]="groupControl"
+                  <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+                  <mat-select #group
+                              [formControl]="groupControl"
                               (ngModelChange)="membersFilter.group=groupControl.value; filterHandler();">
                     <mat-option (click)="membersFilter.group=-1" value="">Все</mat-option>
                     <mat-option *ngFor="let num of getEnumKeys(groupEnum)" [value]="num">
@@ -129,7 +132,9 @@
               <ng-container *ngIf="filtersDisplayed.position">
                 <mat-form-field appearance="fill">
                   <mat-label>Должность</mat-label>
-                  <mat-select [formControl]="positionControl"
+                  <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+                  <mat-select #position
+                              [formControl]="positionControl"
                               (ngModelChange)="membersFilter.position=positionControl.value; filterHandler();">
                     <mat-option (click)="membersFilter.position=-1" value="">Все</mat-option>
                     <mat-option *ngFor="let num of getEnumKeys(positionEnum)" [value]="num">
@@ -142,7 +147,9 @@
               <ng-container *ngIf="filtersDisplayed.experience">
                 <mat-form-field appearance="fill">
                   <mat-label>Стаж</mat-label>
-                  <mat-select [formControl]="experienceControl"
+                  <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+                  <mat-select #experience
+                              [formControl]="experienceControl"
                               (ngModelChange)="membersFilter.experience=experienceControl.value; filterHandler();">
                     <mat-option (click)="membersFilter.experience=-1" value="">Все</mat-option>
                     <mat-option *ngFor="let num of getEnumKeys(experienceEnum)" [value]="num">
@@ -159,7 +166,7 @@
               <div class="settings-panel">
                 <p>{{membersList.length}} пользователя</p>
 
-                <button mat-button [matMenuTriggerFor]="menu">
+                <button class="settings-button" mat-button [matMenuTriggerFor]="menu">
                   <mat-icon class="icon" svgIcon="filter"></mat-icon>
                   Настроить
                 </button>
@@ -194,7 +201,7 @@
                     </mat-checkbox>
                   </div>
 
-                  <p>Дополнительные</p>
+                  <p class="disabled">Дополнительные</p>
                   <div mat-menu-item>
                     <mat-checkbox disabled="">
                       Подразделение
@@ -214,7 +221,7 @@
               </div>
             </div>
 
-            <div class="example-container">
+            <div class="example-container all-members-container">
               <mat-checkbox class="example-box all-check"
                             [checked]="isCopyAllMembers"
                             [indeterminate]="someChecked(false)"
@@ -248,12 +255,14 @@
               <h2 class="subtitle">Участники мероприятия</h2>
 
               <div class="example-box">
-                <mat-checkbox class="all-check"
-                              [checked]="isDeleteAllJoined"
-                              [indeterminate]="someChecked()"
-                              (change)="setAllJoinedChecked($event.checked)">
-                  Все пользователи
-                </mat-checkbox>
+                <ng-container *ngIf="joinedMembers.length > 0">
+                  <mat-checkbox class="all-check"
+                                [checked]="isDeleteAllJoined"
+                                [indeterminate]="someChecked()"
+                                (change)="setAllJoinedChecked($event.checked)">
+                    Все пользователи
+                  </mat-checkbox>
+                </ng-container>
                 <button class="trashbox-button" [hidden]="countChecked()==0" (click)="deleteCheckedJoined()">
                   <mat-icon class="icon" svgIcon="trashbox"></mat-icon>
                 </button>

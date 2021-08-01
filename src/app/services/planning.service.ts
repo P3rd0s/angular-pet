@@ -41,7 +41,7 @@ export class PlanningService {
   //**************************************************************************************************************
   //******************************----------HELPER FUNCTIONS--------------****************************************
   //****************                                                                               ***************
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation:any = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
       return of(result as T);
@@ -52,11 +52,11 @@ export class PlanningService {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  public convertDate(date: Date): string {
+  public convertDate(date: any): string {
 
-    return (date.getDay() + ' '
+    return (date.getDate() + ' '
       + Months[date.getMonth()] + ', '
-      + date.toTimeString().slice(0, 5));
+      + (date.toTimeString().slice(0, 5)[0] == '0' ? date.toTimeString().slice(1, 5) : date.toTimeString().slice(0, 5)));
   }
 
   public planningToTableRow (planning: Planning): TablePlanning {
@@ -98,9 +98,13 @@ export class PlanningService {
           plannings = plannings.filter((planning: Planning) => {
             let eventsLen = planning.events.length;
             //last event - actual and latest
-            if ((eventsLen && (this.convertDate(new Date(planning.events[eventsLen - 1].date)).indexOf(search) !== -1))
-              || ProgramTitle[planning.title].indexOf(search) !== -1) return true;
-            return false;
+            return (eventsLen && (this.convertDate(new Date(planning.events[eventsLen - 1].date)).indexOf(search) !== -1))
+              || ProgramTitle[planning.title].indexOf(search) !== -1;
+
+            //was simplified
+            // if ((eventsLen && (this.convertDate(new Date(planning.events[eventsLen - 1].date)).indexOf(search) !== -1))
+            //   || ProgramTitle[planning.title].indexOf(search) !== -1) return true;
+            // return false;
           });
         }
 

@@ -75,7 +75,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
       id: 0,
       title: ProgramTitle["Страхование с заботой о клиенте"],
-      progress: 88,
+      progress: 98,
 
       events: [events[0]],
 
@@ -86,7 +86,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 1,
         title: ProgramTitle["Вклады: теория и практика"],
-        progress: 41,
+        progress: 91,
 
         events: [events[1]],
 
