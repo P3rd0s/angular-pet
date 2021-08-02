@@ -1,3 +1,17 @@
+# Intall and launch project
+ Один из вариантов для запуска проекта:
+1. ng new proj (создать новый проект и перейти в него)
+2. ng add @angular/material (выполнить в консоли)
+3. (ng i -g moment)
+4. (npm i @angular/material-moment-adatper)
+5. npm install moment --save
+6. npm install --save-dev webpack
+7. copy files to proj (скачать архив, распаковать, скопировать файлы в proj с заменой существующих)
+
+ng serve
+
+
+
 # TestProject
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
