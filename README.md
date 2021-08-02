@@ -1,7 +1,7 @@
 # Isntall and launch project
  Один из вариантов для запуска проекта:
 1. ng new proj (создать новый проект и перейти в него)
-2. ng add @angular/material (выполнить в консоли)
+2. ng add @angular/material (выполнить в консоли, выбрать SCSS, установить анимации)
 3. (ng i -g moment)
 4. (npm i @angular/material-moment-adatper)
 5. npm install moment --save
