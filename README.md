@@ -1,4 +1,4 @@
-# Intall and launch project
+# Isntall and launch project
  Один из вариантов для запуска проекта:
 1. ng new proj (создать новый проект и перейти в него)
 2. ng add @angular/material (выполнить в консоли)
