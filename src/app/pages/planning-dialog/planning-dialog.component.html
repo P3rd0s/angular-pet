@@ -273,7 +273,7 @@
                 [cdkDropListData]="joinedMembers"
                 class="example-list"
                 (cdkDropListDropped)="drop($event)">
-                <div class="example-box joined-list" *ngFor="let item of joinedMembers; let i = index"
+                <div class="example-box joined-box" *ngFor="let item of joinedMembers; let i = index"
                      cdkDrag>
                   <mat-checkbox [(ngModel)]="item.checked"
                                 (ngModelChange)="updateAllChecked()">
