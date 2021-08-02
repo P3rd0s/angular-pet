@@ -26,9 +26,12 @@
               <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
+          <button class="small-screen-button" (click)="showMobileFilters=!showMobileFilters" [hidden]="true">
+            <mat-icon class="icon" svgIcon="filter"></mat-icon>
+          </button>
         </div>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field *ngIf="!showMobileFilters" appearance="fill">
           <mat-label>Программа</mat-label>
           <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
           <mat-select #matSelectTitle
@@ -41,7 +44,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width period-form" appearance="fill">
+        <mat-form-field *ngIf="!showMobileFilters" class="example-full-width period-form" appearance="fill">
           <mat-label>Период</mat-label>
           <input #dateInput matInput (dateChange)="closeDatePicker($event.value, picker); tableHandler()"
                  [matDatepicker]="picker">
@@ -49,7 +52,7 @@
           <mat-datepicker #picker startView="multi-year"></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field *ngIf="!showMobileFilters" appearance="fill">
           <mat-label>Статус</mat-label>
           <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
           <mat-select #matSelectStatus
@@ -67,9 +70,9 @@
       <div class="filters-footer">
 
         <!--        или сесси(Й/Я)-->
-        <p>34 сессии</p>
+        <p *ngIf="!showMobileFilters">34 сессии</p>
 
-        <button class="filter-button" (click)="isAddFiltersOpened = !isAddFiltersOpened">
+        <button *ngIf="!showMobileFilters" class="filter-button" (click)="isAddFiltersOpened = !isAddFiltersOpened">
           <mat-icon class="icon" svgIcon="filter"></mat-icon>
           Настроить фильтр
         </button>
@@ -95,16 +98,31 @@
           </mat-form-field>
         </ng-container>
 
-        <button class="reset-filters-button" (click)="resetFilters(); tableHandler()">
+        <button *ngIf="!showMobileFilters" class="reset-filters-button" (click)="resetFilters(); tableHandler()">
           <mat-icon class="icon" svgIcon="x"></mat-icon>
           Сбросить
         </button>
 
       </div>
-      <div class="plannings-table">
 
+      <div class="small-screen-sort" [hidden]="true">
+        <mat-form-field appearance="fill">
+          <mat-label>Сортировка</mat-label>
+          <mat-icon class="select-icon" svgIcon="expand"></mat-icon>
+          <mat-select
+            [formControl]="mobileSort"
+            (ngModelChange)="this.sortBy=mobileSort.value; tableHandler();">
+            <mat-option value="undefined">Все</mat-option>
+            <mat-option *ngFor="let num of mobileSortOptions" [value]="num.sort">
+              {{num.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="plannings-table">
         <table #table class="plannings-rows" mat-table [dataSource]="dataSource" matSort
-               (matSortChange)="this.sortBy=$event;tableHandler()">
+               (matSortChange)="this.sortBy=$event;tableHandler();">
 
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Дата начала</th>
@@ -160,7 +178,23 @@
 
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <ng-container>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [matMenuTriggerFor]="menu">
+              <mat-menu #menu="matMenu">
+                <button (click)="openPlanningDialog(row.id)" mat-menu-item>
+                  <mat-icon class="icon" svgIcon="edit"></mat-icon>
+                  <span>Редактировать</span>
+                </button>
+                <button (click)="deletePlanning(row.id)" mat-menu-item>
+                  <mat-icon class="icon" svgIcon="del"></mat-icon>
+                  <span>Удалить слот</span>
+                </button>
+              </mat-menu>
+            </tr>
+          </ng-container>
+<!--          <ng-template #noMobile>-->
+<!--            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--          </ng-template>-->
         </table>
 
       </div>

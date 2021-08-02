@@ -18,3 +18,23 @@
   height: 100%;
   position: relative;
 }
+
+@media screen and (max-width: 360px){
+  .add-planning-button {
+  margin-right: 0 !important;
+    div {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+    .icon {
+      width: 16px !important;
+      height: 16px !important;
+      margin-right: 6px !important;
+      margin-top: 4px !important;
+    }
+  }
+  .main-header {
+    padding: 35px 8px 8px;
+  }
+}

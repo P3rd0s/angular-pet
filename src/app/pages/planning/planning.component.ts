@@ -17,6 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
+import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
 
 export interface PlanningDialogData {
   id: number;
@@ -29,9 +30,18 @@ export interface PlanningDialogData {
 })
 export class PlanningComponent implements OnInit {
 
-
   //Table-columns
   public displayedColumns: string[] = ['date', 'title', 'membersCount', 'trainer', 'progress', 'menu'];
+
+  //For adaptive (mobile) web-page
+  public showMobileFilters: boolean = false;
+  public mobileSortHeaders: string[] = [
+    "По дате последнего ивента",
+    "По названию",
+    "По количеству участников",
+    "По имени тренера",
+    "По прогрессу обучения"
+  ];
 
   //Table data
   public dataSource: any = [];
@@ -64,10 +74,15 @@ export class PlanningComponent implements OnInit {
 
   //MembersCount Filter
   public memberCount = new FormControl('', Validators.min(0));
+  public mobileSortOptions: any[] = [];
 
 
   //Sort control
   @ViewChild(MatSort) sort?: MatSort;
+  @ViewChild('menu') mobileMenu?: MatMenuPanel;
+
+  //Mobile sort control
+  public mobileSort = new FormControl();
 
   //Reset control
   @ViewChild('matSelectTitle') matSelectTitle?: MatSelect;
@@ -76,12 +91,32 @@ export class PlanningComponent implements OnInit {
   @ViewChild('table') table?: MatTable<any>;
 
 
+
   constructor(public planningsService: PlanningService,
               public dialog: MatDialog) {
     //Unsubscribe when destroy
     this.planningsService.callNewPlanningDialog$.subscribe(res => {
       if (res) this.openPlanningDialog(-1)
     });
+
+    //Initialize array for mobile sorting options
+    for (let i in this.displayedColumns.slice(0, 5)) {
+      this.mobileSortOptions.push({
+        sort: {
+          active: this.displayedColumns[i],
+          direction: 'asc'
+        },
+        name: this.mobileSortHeaders[i] + ' возр.'
+      });
+      this.mobileSortOptions.push({
+        sort: {
+          active: this.displayedColumns[i],
+          direction: 'desc'
+        },
+        name: this.mobileSortHeaders[i] + ' уб.'
+      });
+    }
+
   }
 
   ngOnInit(): void {

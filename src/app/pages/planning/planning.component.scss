@@ -211,6 +211,10 @@
       }
     }
   }
+
+  .small-screen-sort {
+    @extend .input-form-field;
+  }
 }
 
 .mat-menu-item {
@@ -224,3 +228,119 @@
   }
 }
 
+
+@media screen and (max-width: 360px) {
+
+  $show-filters: true;
+
+  .subheader {
+    display: none;
+  }
+  .planning-page {
+    padding: 8px 16px 16px;
+
+    .planning-type {
+      padding-top: 0;
+      ::ng-deep .mat-tab-label {
+        margin-right: 18px !important;
+      }
+    }
+
+    .main-filters {
+
+      margin-top: 13px !important;
+      > *, .search-form {
+        width: 100%;
+      }
+
+      ::ng-deep {
+        .mat-form-field-wrapper {
+          height: 66px;
+          width: 100% !important;
+          margin-right: 30px;
+        }
+      }
+
+      .find-filter-box {
+        display: flex;
+        ::ng-deep {
+          .mat-form-field-wrapper {
+            width: 80% !important;
+          }
+        }
+        .small-screen-button {
+          background-color: transparent;
+          border: none;
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          margin-top: 26px;
+          margin-right: 2px;
+          padding: 0;
+          * {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  .filters-footer {
+    margin-bottom: 0 !important;
+  }
+  .plannings-table {
+    margin-top: 8px !important;
+  }
+  .mat-row {
+    height: 52px !important;
+  }
+  .small-screen-sort {
+    width: 100%;
+    display: inline-block;
+     mat-form-field {
+      width: 100%;
+    }
+    ::ng-deep {
+      .mat-form-field-wrapper {
+        height: 66px;
+        width: 100% !important;
+      }
+    }
+  }
+
+  .mat-column-trainer, .mat-column-menu {
+    display: none;
+  }
+  .mat-header-row ::ng-deep .ng-trigger-arrowPosition {
+    display: none;
+  }
+  .mat-column-date {
+    ::ng-deep .mat-sort-header-content{
+      width: 102px !important;
+    }
+    width: 102px !important;
+  }
+  .mat-column-title {
+    ::ng-deep .mat-sort-header-content{
+      width: 134px !important;
+    }
+    width: 134px !important;
+  }
+  .mat-column-membersCount {
+    ::ng-deep .mat-sort-header-content {
+      width: 15px !important;
+      overflow-x: hidden;
+    }
+    width: 26px !important;
+  }
+
+  .mat-column-progress {
+    ::ng-deep .mat-sort-header-content {
+      width: 56px !important;
+    }
+    width: 56px !important;
+    overflow-x: hidden;
+  }
+
+}

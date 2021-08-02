@@ -203,11 +203,7 @@ mat-checkbox {
 }
 
 ::ng-deep .mat-dialog-container {
-  padding: 20px 24px 24px;
-
-  //.mat-tab-header, .dialog-header {
-  //  padding: 0 24px;
-  //}
+  padding: 20px 25px 25px;
 }
 
 
@@ -400,6 +396,7 @@ mat-checkbox {
       .left-side {
         width: calc(52% - 2px);
         margin: 0;
+        position: relative;
       }
       .right-side {
         width: calc(48% + 2px);
