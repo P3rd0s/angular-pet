@@ -1,5 +1,11 @@
 @import "../../../UI";
 
+//May be bug, but if we select trainer in Dialog page,
+//mat-select appears outside of page (in some cases). We can avoid this
+//with method below, or if we change page scale
+//::ng-deep .cdk-overlay-pane {
+//  bottom: auto;
+//}
 .example-container {
   width: 400px;
   max-width: 100%;
