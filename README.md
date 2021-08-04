@@ -37,6 +37,9 @@ All filter/searching/sorting information arrives to plannings service, which mak
 emulate backend data processing (filtering, sorting, searching) in "pipe" method and return observable necessary data.
 We can click on each row (planning) and choose, what we need to do with it: edit, or delete. If we click "edit", we get "Planning Editor Page".
 
+![image](https://user-images.githubusercontent.com/64099693/128170605-85591fe2-89b0-4ae6-a07b-aaa169c4206e.png)
+
+
 ## Planning Editor Page
 This page created with two way using: edit existing planning and create new planning. Page consist of two mat-tabs:
 
@@ -45,10 +48,16 @@ In this tab we can choose planning name in mat-select, and type some events. If 
 that is the logic of application. Event also created with opportunity upgrade in future: we can add button, which will allow creating new event fields. After this we could
 add more than 3 events.
 
+![image](https://user-images.githubusercontent.com/64099693/128170635-f13fd2d6-b52b-4d91-8f21-3a6d35112300.png)
+
+
 ### Members editor
 In this tab we can choose members, which will consist in current planning. In left side we have all existing users, we can find someone by searching and filtering,
 After this, we can check users and drag and copy checked users to joined members. Don't worry, user, which already exist in joined members don't duplicate.
 If we want to delete user, we can click del button, or check few users and delete.
+
+![image](https://user-images.githubusercontent.com/64099693/128170672-957a5853-bdcf-4738-91c3-864fdca8589c.png)
+
 
 After saving new planning will add to plannings table.
 
