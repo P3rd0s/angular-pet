@@ -160,7 +160,7 @@
           <ng-container matColumnDef="menu">
             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
             <td class="options-menu" mat-cell *matCellDef="let planningRow">
-              <button mat-icon-button [matMenuTriggerFor]="menu">
+              <button (click)="$event.stopPropagation()" mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
