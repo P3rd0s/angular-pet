@@ -1,4 +1,4 @@
-# Isntall and launch project
+# Install and launch project
 ## In last version only 4 steps:
 1. ng new proj (SCSS)
 2. ng add @angular/material
@@ -23,7 +23,7 @@
 
 ng serve
 
-# Maing techonologies
+# Main techonologies
 In this project I used main technologies: 
 - Angular Routing (lazy loading pages, in-memory-web-api, injectable)
 - Angular Material (mat-dialog, mat-menu, etc)
@@ -33,7 +33,7 @@ In this project I used main technologies:
 # Functional of the site
 ## Home Page
 In main page we can see table with plannings. Also we can search some data in table with search input field, filtering table with some filters, and sorting by columns (mat-sort).
-All filter/searching/sorting information arrives to plannings service, which make http get to "angular-in-memory-web-api". After getting data, service
+All filter/searching/sorting information arrives to plannings service, which make "http.get" to "angular-in-memory-web-api". After getting data, service
 emulate backend data processing (filtering, sorting, searching) in "pipe" method and return observable necessary data.
 We can click on each row (planning) and choose, what we need to do with it: edit, or delete. If we click "edit", we get "Planning Editor Page".
 
