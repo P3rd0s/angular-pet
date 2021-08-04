@@ -1,4 +1,16 @@
 # Isntall and launch project
+## In last version only 4 steps:
+1. ng new proj (SCSS)
+2. ng add @angular/material
+3. npm install angular-in-memory-web-api --save
+4. copy files to proj (скачать архив, распаковать, скопировать файлы в proj с заменой существующих)
+
+
+
+
+
+
+
  Один из вариантов для запуска проекта:
 1. ng new proj (создать новый проект и перейти в него)
 2. ng add @angular/material (выполнить в консоли, выбрать SCSS, установить анимации)
