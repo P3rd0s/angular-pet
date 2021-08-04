@@ -17,7 +17,7 @@ import {MatOption} from "@angular/material/core";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {MatDialog} from '@angular/material/dialog';
 import {PlanningDialogComponent} from "../planning-dialog/planning-dialog.component";
-import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
+import {MatMenuPanel} from "@angular/material/menu";
 
 export interface PlanningDialogData {
   id: number;
@@ -200,7 +200,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public openPlanningDialog(id: number): void {
-    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}, position: {right: '-16px'}});
+    const confirmDialog = this.dialog.open(PlanningDialogComponent, {data: {id: id}, position: {right: '-16px'}, height: '100%'});
     confirmDialog.afterClosed()
       .pipe(take<TablePlanning>(1))
       .subscribe(isTrue => {
